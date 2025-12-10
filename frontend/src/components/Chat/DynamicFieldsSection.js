@@ -2,6 +2,7 @@
  * Section des champs dynamiques
  */
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import DynamicField from './DynamicField';
 
 function DynamicFieldsSection({ 
@@ -12,11 +13,13 @@ function DynamicFieldsSection({
   missingProperties,
   disabled 
 }) {
+  const { t } = useTranslation();
+  
   return (
     <div style={{ marginTop: '20px', padding: '15px', background: 'rgba(139, 92, 246, 0.1)', borderRadius: '10px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
         <h3 style={{ color: '#ffffff', fontSize: '1rem', margin: 0 }}>
-          Champs dynamiques ({dynamicFields.length}/10)
+          {t('chat.dynamicFields.title', { count: dynamicFields.length })}
         </h3>
         <button
           type="button"
@@ -33,7 +36,7 @@ function DynamicFieldsSection({
             cursor: dynamicFields.length >= 10 ? 'not-allowed' : 'pointer'
           }}
         >
-          + Ajouter un champ
+          {t('chat.dynamicFields.add')}
         </button>
       </div>
 

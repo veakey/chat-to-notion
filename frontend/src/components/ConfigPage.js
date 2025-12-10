@@ -2,12 +2,14 @@
  * Page de configuration Notion
  */
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useToast } from '../contexts/ToastContext';
 import { useConfig } from '../hooks/useConfig';
 import ConfigForm from './Config/ConfigForm';
 import PropertiesSection from './Config/PropertiesSection';
 
 function ConfigPage({ isConfigured, onConfigSaved }) {
+  const { t } = useTranslation();
   const { success, error } = useToast();
   
   const {
@@ -49,7 +51,7 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
   return (
     <div className="glass-card">
       <h2 style={{ color: '#ffffff', marginBottom: '20px' }}>
-        Configuration Notion
+        {t('config.title')}
       </h2>
 
       <div style={{ marginBottom: '20px' }}>
@@ -58,7 +60,7 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
             isConfigured ? 'status-configured' : 'status-not-configured'
           }`}
         >
-          {isConfigured ? '✓ Configuré' : '✗ Non configuré'}
+          {isConfigured ? t('config.status.configured') : t('config.status.notConfigured')}
         </span>
       </div>
 
@@ -83,11 +85,11 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
 
       <div style={{ marginTop: '30px', padding: '15px', background: 'rgba(139, 92, 246, 0.2)', borderRadius: '10px', border: '1px solid rgba(196, 181, 253, 0.3)' }}>
         <h3 style={{ color: '#ffffff', fontSize: '1rem', marginBottom: '10px' }}>
-          📖 Instructions de configuration
+          {t('config.instructions.title')}
         </h3>
         <ol style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.875rem', paddingLeft: '20px' }}>
           <li style={{ marginBottom: '8px' }}>
-            Créez une nouvelle intégration sur{' '}
+            {t('config.instructions.step1')}{' '}
             <a
               href="https://www.notion.so/my-integrations"
               target="_blank"
@@ -98,22 +100,22 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
             </a>
           </li>
           <li style={{ marginBottom: '8px' }}>
-            Copiez le <strong>"Code secret de l'intégration interne"</strong> (cliquez sur "Afficher" pour le voir)
+            {t('config.instructions.step2')}
           </li>
           <li style={{ marginBottom: '8px' }}>
-            Créez ou ouvrez une base de données dans Notion
+            {t('config.instructions.step3')}
           </li>
           <li style={{ marginBottom: '8px' }}>
-            Assurez-vous que votre base de données a les propriétés "Name" (titre) et "Date" (date)
+            {t('config.instructions.step4')}
           </li>
           <li style={{ marginBottom: '8px' }}>
-            Partagez la base de données avec votre intégration (cliquez sur "..." → "Ajouter des connexions")
+            {t('config.instructions.step5')}
           </li>
           <li style={{ marginBottom: '8px' }}>
-            Copiez l'ID de la base de données depuis l'URL : notion.so/[workspace]/[database_id]?v=...
+            {t('config.instructions.step6')}
             <br />
             <small style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-              L'ID est la partie entre le dernier "/" et le "?" dans l'URL
+              {t('config.instructions.step6Note')}
             </small>
           </li>
         </ol>

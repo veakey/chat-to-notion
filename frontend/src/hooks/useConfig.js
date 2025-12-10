@@ -3,6 +3,8 @@
  */
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import i18n from '../i18n/config';
+import { translateBackendError } from '../utils/errorTranslator';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -54,11 +56,12 @@ export function useConfig(isConfigured) {
       await axios.post(`${API_BASE_URL}/api/config/properties`, {
         additionalProperties: selectedProperties
       });
-      return { success: true, message: 'Propriétés supplémentaires enregistrées avec succès' };
+      return { success: true, message: i18n.t('success.propertiesSaved') };
     } catch (err) {
+      const errorMessage = err.response?.data?.error;
       return { 
         success: false, 
-        error: err.response?.data?.error || 'Erreur lors de l\'enregistrement des propriétés' 
+        error: translateBackendError(errorMessage)
       };
     }
   };
@@ -84,9 +87,10 @@ export function useConfig(isConfigured) {
         message: response.data.message 
       };
     } catch (err) {
+      const errorMessage = err.response?.data?.error;
       return { 
         success: false, 
-        error: err.response?.data?.error || 'Failed to save configuration' 
+        error: translateBackendError(errorMessage)
       };
     } finally {
       setLoading(false);

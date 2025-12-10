@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import './App.css';
 import ConfigPage from './components/ConfigPage';
 import ChatPage from './components/ChatPage';
 import ToastContainer from './components/ToastContainer';
+import LanguageSelector from './components/LanguageSelector';
 import { ToastProvider } from './contexts/ToastContext';
 import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 function App() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('chat');
   const [isConfigured, setIsConfigured] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -37,16 +40,17 @@ function App() {
     <ToastProvider>
       <div className="app">
         <div className="background"></div>
+        <LanguageSelector />
         <ToastContainer />
         <div className="container">
-          <h1 className="app-title">Chat vers Notion</h1>
+          <h1 className="app-title">{t('app.title')}</h1>
           <p className="app-subtitle">
-            Envoyez vos conversations de chat vers Notion en toute simplicité
+            {t('app.subtitle')}
           </p>
 
           {loading ? (
             <div className="glass-card">
-              <div className="loading">Chargement...</div>
+              <div className="loading">{t('app.loading')}</div>
             </div>
           ) : (
             <>
@@ -55,13 +59,13 @@ function App() {
                   className={`tab-button ${activeTab === 'chat' ? 'active' : ''}`}
                   onClick={() => setActiveTab('chat')}
                 >
-                  📝 Envoyer un chat
+                  {t('app.tabs.chat')}
                 </button>
                 <button
                   className={`tab-button ${activeTab === 'config' ? 'active' : ''}`}
                   onClick={() => setActiveTab('config')}
                 >
-                  ⚙️ Configuration
+                  {t('app.tabs.config')}
                 </button>
               </div>
 

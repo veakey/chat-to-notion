@@ -54,3 +54,13 @@
 - Ajout de la mention explicite de la licence MIT
 - Ajout du lien vers la documentation API Notion
 - Section Resources avec liens utiles
+
+## [#9] Implémentation de l'internationalisation (i18n)
+- Installation de react-i18next pour le frontend
+- Création de la structure locales/{fr,en}/translation.json
+- Extraction et remplacement de tous les textes hardcodés par des clés de traduction
+- Configuration de react-i18next avec détection automatique de la langue du navigateur
+- Ajout d'un sélecteur de langue dans l'interface utilisateur
+- Sauvegarde de la préférence de langue dans localStorage
+- Traduction des messages d'erreur backend
+- Documentation pour l'ajout de nouvelles langues

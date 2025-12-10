@@ -84,3 +84,17 @@
 - Migration vers une base de données (SQLite pour dev, PostgreSQL pour prod)
 - Chiffrement des credentials
 - Support multi-utilisateurs (futur)
+
+## 11. Support de l'internationalisation (i18n)
+**Priorité** : Moyenne
+**Description** : Ajouter le support multilingue pour rendre l'application accessible à un public international.
+**Détails** :
+- Phase 1 : Français (actuel) et Anglais
+- Phase 2 : Espagnol, Allemand
+- Phase 3 : Autres langues selon la demande
+- Frontend : react-i18next avec locales/{fr,en}/translation.json
+- Backend : Codes d'erreur ou messages traduits
+- Détection automatique de la langue du navigateur
+- Sélecteur de langue dans l'interface
+- Sauvegarde de la préférence dans localStorage
+- Documentation pour ajouter de nouvelles langues

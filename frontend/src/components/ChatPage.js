@@ -2,6 +2,7 @@
  * Page principale pour envoyer des chats vers Notion
  */
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useToast } from '../contexts/ToastContext';
 import { useChatForm } from '../hooks/useChatForm';
 import { useDynamicFields } from '../hooks/useDynamicFields';
@@ -11,6 +12,7 @@ import DynamicFieldsSection from './Chat/DynamicFieldsSection';
 import PropertyFieldsSection from './Chat/PropertyFieldsSection';
 
 function ChatPage({ isConfigured }) {
+  const { t } = useTranslation();
   const { success, error } = useToast();
   
   const {
@@ -44,7 +46,7 @@ function ChatPage({ isConfigured }) {
 
   const handleAddField = () => {
     if (!addDynamicField()) {
-      error('Maximum 10 champs dynamiques autorisés');
+      error(t('chat.dynamicFields.maxReached'));
     }
   };
 
@@ -52,7 +54,7 @@ function ChatPage({ isConfigured }) {
     e.preventDefault();
 
     if (!isConfigured) {
-      error('Veuillez d\'abord configurer les identifiants Notion dans l\'onglet Configuration');
+      error(t('errors.notConfigured'));
       return;
     }
 
@@ -77,29 +79,29 @@ function ChatPage({ isConfigured }) {
   return (
     <div className="glass-card">
       <h2 style={{ color: '#ffffff', marginBottom: '20px' }}>
-        Envoyer un chat vers Notion
+        {t('chat.title')}
       </h2>
 
       {!isConfigured && (
         <div className="message message-info">
-          ⚠️ Veuillez d'abord configurer vos identifiants Notion dans l'onglet Configuration
+          {t('chat.notConfigured')}
         </div>
       )}
 
       {missingProperties.length > 0 && (
         <div className="message message-error" style={{ marginBottom: '20px' }}>
-          ⚠️ Les propriétés suivantes n'existent pas dans votre base de données Notion :{' '}
+          {t('chat.missingProperties')}{' '}
           <strong>{missingProperties.join(', ')}</strong>
           <br />
           <small style={{ fontSize: '0.875rem', opacity: 0.8 }}>
-            Veuillez créer ces propriétés dans Notion ou supprimer ces champs avant d'envoyer.
+            {t('chat.missingPropertiesNote')}
           </small>
         </div>
       )}
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label className="form-label">Date du chat</label>
+          <label className="form-label">{t('chat.form.dateLabel')}</label>
           <input
             type="date"
             className="form-input"
@@ -111,10 +113,10 @@ function ChatPage({ isConfigured }) {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Contenu du chat</label>
+          <label className="form-label">{t('chat.form.contentLabel')}</label>
           <textarea
             className="form-textarea"
-            placeholder={`Collez votre conversation de chat ici...\n\nExemple :\nUtilisateur : Qu'est-ce que React ?\nAssistant : React est une bibliothèque JavaScript pour créer des interfaces utilisateur...`}
+            placeholder={t('chat.form.contentPlaceholder')}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
@@ -146,26 +148,26 @@ function ChatPage({ isConfigured }) {
           className="btn btn-primary btn-full"
           disabled={loading || !isConfigured}
         >
-          {loading ? 'Envoi en cours...' : 'Envoyer vers Notion'}
+          {loading ? t('chat.form.submitLoading') : t('chat.form.submit')}
         </button>
       </form>
 
       <div style={{ marginTop: '30px', padding: '15px', background: 'rgba(139, 92, 246, 0.2)', borderRadius: '10px', border: '1px solid rgba(196, 181, 253, 0.3)' }}>
         <h3 style={{ color: '#ffffff', fontSize: '1rem', marginBottom: '10px' }}>
-          💡 Conseils
+          {t('chat.tips.title')}
         </h3>
         <ul style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.875rem', paddingLeft: '20px' }}>
           <li style={{ marginBottom: '8px' }}>
-            Vous pouvez coller des conversations complètes depuis ChatGPT ou d'autres plateformes
+            {t('chat.tips.tip1')}
           </li>
           <li style={{ marginBottom: '8px' }}>
-            La première ligne sera utilisée comme titre dans Notion
+            {t('chat.tips.tip2')}
           </li>
           <li style={{ marginBottom: '8px' }}>
-            Sélectionnez une date pour organiser vos chats chronologiquement
+            {t('chat.tips.tip3')}
           </li>
           <li style={{ marginBottom: '8px' }}>
-            Le chat sera enregistré comme une nouvelle page dans votre base de données Notion configurée
+            {t('chat.tips.tip4')}
           </li>
         </ul>
       </div>

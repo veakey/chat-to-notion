@@ -3,6 +3,8 @@
  */
 import { useState } from 'react';
 import axios from 'axios';
+import i18n from '../i18n/config';
+import { translateBackendError } from '../utils/errorTranslator';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
@@ -55,7 +57,7 @@ export function useChatSubmission() {
         setLoading(false);
         return {
           success: false,
-          error: `Les propriétés suivantes n'existent pas dans Notion : ${validation.missing.join(', ')}`
+          error: i18n.t('chat.missingProperties') + ' ' + validation.missing.join(', ')
         };
       }
 
@@ -92,7 +94,7 @@ export function useChatSubmission() {
         setProgress(100);
         return {
           success: false,
-          error: `Les propriétés suivantes n'existent pas dans Notion : ${response.data.missingProperties.join(', ')}`,
+          error: i18n.t('chat.missingProperties') + ' ' + response.data.missingProperties.join(', '),
           missingProperties: response.data.missingProperties
         };
       }
@@ -105,9 +107,10 @@ export function useChatSubmission() {
       };
     } catch (err) {
       setProgress(0);
+      const errorMessage = err.response?.data?.error;
       return {
         success: false,
-        error: err.response?.data?.error || 'Échec de l\'envoi du chat vers Notion'
+        error: translateBackendError(errorMessage)
       };
     } finally {
       setLoading(false);

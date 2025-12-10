@@ -2,48 +2,52 @@
  * Formulaire de configuration Notion
  */
 import React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 
 function ConfigForm({ apiKey, setApiKey, databaseId, setDatabaseId, onSubmit, loading }) {
+  const { t } = useTranslation();
+  
   return (
     <form onSubmit={onSubmit}>
       <div className="form-group">
-        <label className="form-label">Code secret de l'intégration interne</label>
+        <label className="form-label">{t('config.form.apiKeyLabel')}</label>
         <input
           type="password"
           className="form-input"
-          placeholder="secret_..."
+          placeholder={t('config.form.apiKeyPlaceholder')}
           value={apiKey}
           onChange={(e) => setApiKey(e.target.value)}
           required
           disabled={loading}
         />
         <p style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.875rem', marginTop: '5px' }}>
-          Copiez le code secret depuis votre{' '}
-          <a
-            href="https://www.notion.so/my-integrations"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: '#c4b5fd' }}
-          >
-            intégration Notion
-          </a>
-          {' '}(bouton "Afficher" ou "Actualiser")
+          <Trans
+            i18nKey="config.form.apiKeyHelp"
+            components={{
+              link: <a
+                href="https://www.notion.so/my-integrations"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#c4b5fd' }}
+              />
+            }}
+          />
         </p>
       </div>
 
       <div className="form-group">
-        <label className="form-label">ID de la base de données</label>
+        <label className="form-label">{t('config.form.databaseIdLabel')}</label>
         <input
           type="text"
           className="form-input"
-          placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+          placeholder={t('config.form.databaseIdPlaceholder')}
           value={databaseId}
           onChange={(e) => setDatabaseId(e.target.value)}
           required
           disabled={loading}
         />
         <p style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.875rem', marginTop: '5px' }}>
-          La base de données doit avoir les propriétés "Name" (titre) et "Date" (date)
+          {t('config.form.databaseIdHelp')}
         </p>
       </div>
 
@@ -52,7 +56,7 @@ function ConfigForm({ apiKey, setApiKey, databaseId, setDatabaseId, onSubmit, lo
         className="btn btn-primary btn-full"
         disabled={loading}
       >
-        {loading ? 'Enregistrement...' : 'Enregistrer la configuration'}
+        {loading ? t('config.form.submitLoading') : t('config.form.submit')}
       </button>
     </form>
   );
