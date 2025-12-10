@@ -2,20 +2,23 @@
  * Composant pour un champ dynamique individuel
  */
 import React from 'react';
-
-const NOTION_TYPES = [
-  { value: 'rich_text', label: 'Texte' },
-  { value: 'number', label: 'Nombre' },
-  { value: 'select', label: 'Sélection' },
-  { value: 'multi_select', label: 'Sélection multiple' },
-  { value: 'date', label: 'Date' },
-  { value: 'checkbox', label: 'Case à cocher' },
-  { value: 'url', label: 'URL' },
-  { value: 'email', label: 'Email' },
-  { value: 'phone_number', label: 'Téléphone' }
-];
+import { useTranslation } from 'react-i18next';
 
 function DynamicField({ field, onUpdate, onRemove, isMissing, disabled }) {
+  const { t } = useTranslation();
+  
+  const NOTION_TYPES = [
+    { value: 'rich_text', label: t('dynamicField.types.rich_text') },
+    { value: 'number', label: t('dynamicField.types.number') },
+    { value: 'select', label: t('dynamicField.types.select') },
+    { value: 'multi_select', label: t('dynamicField.types.multi_select') },
+    { value: 'date', label: t('dynamicField.types.date') },
+    { value: 'checkbox', label: t('dynamicField.types.checkbox') },
+    { value: 'url', label: t('dynamicField.types.url') },
+    { value: 'email', label: t('dynamicField.types.email') },
+    { value: 'phone_number', label: t('dynamicField.types.phone_number') }
+  ];
+  
   const handleChange = (fieldName, value) => {
     onUpdate(field.id, fieldName, value);
   };
@@ -38,7 +41,7 @@ function DynamicField({ field, onUpdate, onRemove, isMissing, disabled }) {
         <input
           type="number"
           className="form-input"
-          placeholder="Valeur"
+          placeholder={t('dynamicField.value')}
           value={field.value || ''}
           onChange={(e) => handleChange('value', e.target.value)}
           disabled={disabled}
@@ -62,7 +65,7 @@ function DynamicField({ field, onUpdate, onRemove, isMissing, disabled }) {
       <input
         type="text"
         className="form-input"
-        placeholder="Valeur"
+        placeholder={t('dynamicField.value')}
         value={field.value || ''}
         onChange={(e) => handleChange('value', e.target.value)}
         disabled={disabled}
@@ -76,7 +79,7 @@ function DynamicField({ field, onUpdate, onRemove, isMissing, disabled }) {
         <input
           type="text"
           className="form-input"
-          placeholder="Nom de la propriété"
+          placeholder={t('dynamicField.propertyName')}
           value={field.name}
           onChange={(e) => handleChange('name', e.target.value)}
           disabled={disabled}
@@ -111,7 +114,7 @@ function DynamicField({ field, onUpdate, onRemove, isMissing, disabled }) {
       </div>
       {isMissing && (
         <div style={{ color: '#fca5a5', fontSize: '0.875rem', marginBottom: '8px' }}>
-          ⚠️ Cette propriété n'existe pas dans votre base de données Notion
+          {t('dynamicField.missing')}
         </div>
       )}
       {renderInput()}

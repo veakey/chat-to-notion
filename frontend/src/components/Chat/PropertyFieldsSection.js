@@ -2,6 +2,7 @@
  * Section des propriétés configurées
  */
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 function PropertyFieldsSection({ 
   availableProperties, 
@@ -10,6 +11,7 @@ function PropertyFieldsSection({
   onPropertyChange,
   disabled 
 }) {
+  const { t } = useTranslation();
   const visibleProperties = availableProperties.filter(prop => selectedProperties[prop.name]);
   
   if (visibleProperties.length === 0) {
@@ -19,7 +21,7 @@ function PropertyFieldsSection({
   return (
     <div style={{ marginTop: '20px', padding: '15px', background: 'rgba(139, 92, 246, 0.1)', borderRadius: '10px' }}>
       <h3 style={{ color: '#ffffff', fontSize: '1rem', marginBottom: '15px' }}>
-        Propriétés supplémentaires
+        {t('chat.propertyFields.title')}
       </h3>
       {visibleProperties.map(prop => (
         <div key={prop.name} className="form-group" style={{ marginBottom: '15px' }}>
@@ -52,7 +54,7 @@ function PropertyFieldsSection({
             <input
               type="text"
               className="form-input"
-              placeholder={`Saisissez une valeur pour ${prop.name} (${prop.type})`}
+              placeholder={t('chat.propertyFields.placeholder', { name: prop.name, type: prop.type })}
               value={propertyValues[prop.name] || ''}
               onChange={(e) => onPropertyChange(prop.name, e.target.value)}
               disabled={disabled}

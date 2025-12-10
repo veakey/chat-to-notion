@@ -34,3 +34,13 @@ Maintenir une documentation complète et à jour incluant :
 - Documentation de l'API
 - Guide de dépannage
 - Références vers la documentation Notion API
+
+## [#6] Support de l'internationalisation (i18n)
+Ajouter le support multilingue pour rendre l'application accessible à un public international :
+- Phase 1 : Français (actuel) et Anglais
+- Phase 2 : Espagnol, Allemand
+- Phase 3 : Autres langues selon la demande de la communauté
+- Détection automatique de la langue du navigateur
+- Sélecteur de langue dans l'interface
+- Traduction de tous les textes (frontend et messages d'erreur backend)
+- Sauvegarde de la préférence de langue dans localStorage

@@ -1,0 +1,115 @@
+{
+  "app": {
+    "title": "Chat to Notion",
+    "subtitle": "Send your chat conversations to Notion with ease",
+    "loading": "Loading...",
+    "tabs": {
+      "chat": "📝 Send a chat",
+      "config": "⚙️ Configuration"
+    }
+  },
+  "config": {
+    "title": "Notion Configuration",
+    "status": {
+      "configured": "✓ Configured",
+      "notConfigured": "✗ Not configured"
+    },
+    "form": {
+      "apiKeyLabel": "Internal Integration Secret",
+      "apiKeyPlaceholder": "secret_...",
+      "apiKeyHelp": "Copy the secret code from your {{link}} (\"Show\" or \"Refresh\" button)",
+      "apiKeyLink": "Notion integration",
+      "databaseIdLabel": "Database ID",
+      "databaseIdPlaceholder": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "databaseIdHelp": "The database must have \"Name\" (title) and \"Date\" (date) properties",
+      "submit": "Save Configuration",
+      "submitLoading": "Saving..."
+    },
+    "properties": {
+      "title": "⚙️ Additional Properties",
+      "description": "Select the properties you want to use when sending chats to Notion",
+      "loading": "Loading properties...",
+      "none": "No additional properties available in your database.",
+      "type": "Type: {{type}}",
+      "save": "Save Selected Properties"
+    },
+    "instructions": {
+      "title": "📖 Configuration Instructions",
+      "step1": "Create a new integration on",
+      "step2": "Copy the \"Internal Integration Secret\" (click \"Show\" to see it)",
+      "step3": "Create or open a database in Notion",
+      "step4": "Make sure your database has \"Name\" (title) and \"Date\" (date) properties",
+      "step5": "Share the database with your integration (click \"...\" → \"Add connections\")",
+      "step6": "Copy the database ID from the URL: notion.so/[workspace]/[database_id]?v=...",
+      "step6Note": "The ID is the part between the last \"/\" and the \"?\" in the URL"
+    }
+  },
+  "chat": {
+    "title": "Send a chat to Notion",
+    "notConfigured": "⚠️ Please configure your Notion credentials in the Configuration tab first",
+    "missingProperties": "⚠️ The following properties do not exist in your Notion database:",
+    "missingPropertiesNote": "Please create these properties in Notion or remove these fields before sending.",
+    "form": {
+      "dateLabel": "Chat date",
+      "contentLabel": "Chat content",
+      "contentPlaceholder": "Paste your chat conversation here...\n\nExample:\nUser: What is React?\nAssistant: React is a JavaScript library for building user interfaces...",
+      "submit": "Send to Notion",
+      "submitLoading": "Sending..."
+    },
+    "dynamicFields": {
+      "title": "Dynamic fields ({{count}}/10)",
+      "add": "+ Add a field",
+      "maxReached": "Maximum 10 dynamic fields allowed"
+    },
+    "propertyFields": {
+      "title": "Additional Properties",
+      "placeholder": "Enter a value for {{name}} ({{type}})"
+    },
+    "tips": {
+      "title": "💡 Tips",
+      "tip1": "You can paste complete conversations from ChatGPT or other platforms",
+      "tip2": "The first line will be used as the title in Notion",
+      "tip3": "Select a date to organize your chats chronologically",
+      "tip4": "The chat will be saved as a new page in your configured Notion database"
+    }
+  },
+  "errors": {
+    "notConfigured": "Please configure Notion credentials in the Configuration tab first",
+    "contentRequired": "Chat content is required",
+    "apiKeyRequired": "Secret code and database ID are required",
+    "invalidCredentials": "Invalid Notion credentials: {{error}}",
+    "noTitleProperty": "No 'title' type property found in the database. Please create a title type property.",
+    "notionNotConfigured": "Notion is not configured. Please configure credentials first.",
+    "propertyDetectionError": "Error detecting properties: {{error}}"
+  },
+  "success": {
+    "configSaved": "Configuration saved successfully",
+    "propertiesSaved": "Additional properties saved successfully",
+    "dynamicFieldsSaved": "Dynamic fields saved successfully",
+    "chatSent": "Chat sent to Notion successfully ({{blocks}} blocks created)",
+    "chatSentWithDate": "Chat sent to Notion successfully ({{blocks}} blocks created) - Date: {{date}}",
+    "chatSentNoDate": "Chat sent to Notion successfully ({{blocks}} blocks created) - ⚠️ No date property found in your database"
+  },
+  "language": {
+    "selector": "Language",
+    "french": "Français",
+    "english": "English"
+  },
+  "dynamicField": {
+    "propertyName": "Property name",
+    "value": "Value",
+    "missing": "⚠️ This property does not exist in your Notion database",
+    "types": {
+      "rich_text": "Text",
+      "number": "Number",
+      "select": "Select",
+      "multi_select": "Multi-select",
+      "date": "Date",
+      "checkbox": "Checkbox",
+      "url": "URL",
+      "email": "Email",
+      "phone_number": "Phone"
+    }
+  }
+}
+

@@ -10,6 +10,7 @@ A fullstack web application that allows users to paste chat conversations (from 
 - 🖼️ **Stunning Background**: Eye-catching background image
 - 📊 **Notion Integration**: Automatically creates pages in your Notion database
 - 🔍 **Smart Parsing**: Extracts titles and content from chat conversations
+- 🌍 **Internationalization (i18n)**: Support for multiple languages (French, English, and more)
 
 ## Prerequisites
 
@@ -293,6 +294,19 @@ Send chat content to Notion.
 - Implement backup strategies
 - Use connection pooling
 
+## Internationalization
+
+The application supports multiple languages with automatic browser language detection:
+
+- 🇫🇷 **French** (default)
+- 🇬🇧 **English**
+
+You can change the language using the language selector in the top-right corner of the interface. Your language preference is saved in localStorage.
+
+### Adding a New Language
+
+See [frontend/src/i18n/README.md](frontend/src/i18n/README.md) for detailed instructions on adding support for additional languages.
+
 ## Future Enhancements
 
 Planned features for future releases:
@@ -302,6 +316,7 @@ Planned features for future releases:
 - 🔄 **Auto-detection**: Automatic format detection and parsing
 - 📊 **Advanced Parsing**: Intelligent content extraction from various formats
 - 🎯 **Custom Mapping**: Configurable field mapping for structured data
+- 🌍 **More Languages**: Spanish, German, and other languages based on community demand
 
 ## Contributing
 

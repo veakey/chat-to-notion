@@ -1,0 +1,115 @@
+{
+  "app": {
+    "title": "Chat vers Notion",
+    "subtitle": "Envoyez vos conversations de chat vers Notion en toute simplicité",
+    "loading": "Chargement...",
+    "tabs": {
+      "chat": "📝 Envoyer un chat",
+      "config": "⚙️ Configuration"
+    }
+  },
+  "config": {
+    "title": "Configuration Notion",
+    "status": {
+      "configured": "✓ Configuré",
+      "notConfigured": "✗ Non configuré"
+    },
+    "form": {
+      "apiKeyLabel": "Code secret de l'intégration interne",
+      "apiKeyPlaceholder": "secret_...",
+      "apiKeyHelp": "Copiez le code secret depuis votre {{link}} (bouton \"Afficher\" ou \"Actualiser\")",
+      "apiKeyLink": "intégration Notion",
+      "databaseIdLabel": "ID de la base de données",
+      "databaseIdPlaceholder": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "databaseIdHelp": "La base de données doit avoir les propriétés \"Name\" (titre) et \"Date\" (date)",
+      "submit": "Enregistrer la configuration",
+      "submitLoading": "Enregistrement..."
+    },
+    "properties": {
+      "title": "⚙️ Propriétés supplémentaires",
+      "description": "Sélectionnez les propriétés que vous souhaitez utiliser lors de l'envoi de chats vers Notion",
+      "loading": "Chargement des propriétés...",
+      "none": "Aucune propriété supplémentaire disponible dans votre base de données.",
+      "type": "Type: {{type}}",
+      "save": "Enregistrer les propriétés sélectionnées"
+    },
+    "instructions": {
+      "title": "📖 Instructions de configuration",
+      "step1": "Créez une nouvelle intégration sur",
+      "step2": "Copiez le \"Code secret de l'intégration interne\" (cliquez sur \"Afficher\" pour le voir)",
+      "step3": "Créez ou ouvrez une base de données dans Notion",
+      "step4": "Assurez-vous que votre base de données a les propriétés \"Name\" (titre) et \"Date\" (date)",
+      "step5": "Partagez la base de données avec votre intégration (cliquez sur \"...\" → \"Ajouter des connexions\")",
+      "step6": "Copiez l'ID de la base de données depuis l'URL : notion.so/[workspace]/[database_id]?v=...",
+      "step6Note": "L'ID est la partie entre le dernier \"/\" et le \"?\" dans l'URL"
+    }
+  },
+  "chat": {
+    "title": "Envoyer un chat vers Notion",
+    "notConfigured": "⚠️ Veuillez d'abord configurer vos identifiants Notion dans l'onglet Configuration",
+    "missingProperties": "⚠️ Les propriétés suivantes n'existent pas dans votre base de données Notion :",
+    "missingPropertiesNote": "Veuillez créer ces propriétés dans Notion ou supprimer ces champs avant d'envoyer.",
+    "form": {
+      "dateLabel": "Date du chat",
+      "contentLabel": "Contenu du chat",
+      "contentPlaceholder": "Collez votre conversation de chat ici...\n\nExemple :\nUtilisateur : Qu'est-ce que React ?\nAssistant : React est une bibliothèque JavaScript pour créer des interfaces utilisateur...",
+      "submit": "Envoyer vers Notion",
+      "submitLoading": "Envoi en cours..."
+    },
+    "dynamicFields": {
+      "title": "Champs dynamiques ({{count}}/10)",
+      "add": "+ Ajouter un champ",
+      "maxReached": "Maximum 10 champs dynamiques autorisés"
+    },
+    "propertyFields": {
+      "title": "Propriétés supplémentaires",
+      "placeholder": "Saisissez une valeur pour {{name}} ({{type}})"
+    },
+    "tips": {
+      "title": "💡 Conseils",
+      "tip1": "Vous pouvez coller des conversations complètes depuis ChatGPT ou d'autres plateformes",
+      "tip2": "La première ligne sera utilisée comme titre dans Notion",
+      "tip3": "Sélectionnez une date pour organiser vos chats chronologiquement",
+      "tip4": "Le chat sera enregistré comme une nouvelle page dans votre base de données Notion configurée"
+    }
+  },
+  "errors": {
+    "notConfigured": "Veuillez d'abord configurer les identifiants Notion dans l'onglet Configuration",
+    "contentRequired": "Le contenu du chat est requis",
+    "apiKeyRequired": "Le code secret et l'ID de la base de données sont requis",
+    "invalidCredentials": "Identifiants Notion invalides : {{error}}",
+    "noTitleProperty": "Aucune propriété de type 'title' trouvée dans la base de données. Veuillez créer une propriété de type titre.",
+    "notionNotConfigured": "Notion n'est pas configuré. Veuillez configurer les identifiants d'abord.",
+    "propertyDetectionError": "Erreur lors de la détection des propriétés : {{error}}"
+  },
+  "success": {
+    "configSaved": "Configuration enregistrée avec succès",
+    "propertiesSaved": "Propriétés supplémentaires enregistrées avec succès",
+    "dynamicFieldsSaved": "Champs dynamiques enregistrés avec succès",
+    "chatSent": "Chat envoyé à Notion avec succès ({{blocks}} blocs créés)",
+    "chatSentWithDate": "Chat envoyé à Notion avec succès ({{blocks}} blocs créés) - Date: {{date}}",
+    "chatSentNoDate": "Chat envoyé à Notion avec succès ({{blocks}} blocs créés) - ⚠️ Aucune propriété date trouvée dans votre base de données"
+  },
+  "language": {
+    "selector": "Langue",
+    "french": "Français",
+    "english": "English"
+  },
+  "dynamicField": {
+    "propertyName": "Nom de la propriété",
+    "value": "Valeur",
+    "missing": "⚠️ Cette propriété n'existe pas dans votre base de données Notion",
+    "types": {
+      "rich_text": "Texte",
+      "number": "Nombre",
+      "select": "Sélection",
+      "multi_select": "Sélection multiple",
+      "date": "Date",
+      "checkbox": "Case à cocher",
+      "url": "URL",
+      "email": "Email",
+      "phone_number": "Téléphone"
+    }
+  }
+}
+

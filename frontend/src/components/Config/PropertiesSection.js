@@ -2,6 +2,7 @@
  * Section pour configurer les propriétés supplémentaires
  */
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 function PropertiesSection({ 
   availableProperties, 
@@ -10,20 +11,22 @@ function PropertiesSection({
   onSave,
   loadingProperties 
 }) {
+  const { t } = useTranslation();
+  
   return (
     <div style={{ marginTop: '30px' }}>
       <h3 style={{ color: '#ffffff', fontSize: '1.1rem', marginBottom: '15px' }}>
-        ⚙️ Propriétés supplémentaires
+        {t('config.properties.title')}
       </h3>
       <p style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.875rem', marginBottom: '15px' }}>
-        Sélectionnez les propriétés que vous souhaitez utiliser lors de l'envoi de chats vers Notion
+        {t('config.properties.description')}
       </p>
       
       {loadingProperties ? (
-        <div style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Chargement des propriétés...</div>
+        <div style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{t('config.properties.loading')}</div>
       ) : availableProperties.length === 0 ? (
         <div style={{ color: 'rgba(255, 255, 255, 0.7)', padding: '15px', background: 'rgba(139, 92, 246, 0.1)', borderRadius: '10px' }}>
-          Aucune propriété supplémentaire disponible dans votre base de données.
+          {t('config.properties.none')}
         </div>
       ) : (
         <>
@@ -51,7 +54,7 @@ function PropertiesSection({
                 <div style={{ flex: 1 }}>
                   <div style={{ color: '#ffffff', fontWeight: '500' }}>{prop.name}</div>
                   <div style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '0.8rem' }}>
-                    Type: {prop.type}
+                    {t('config.properties.type', { type: prop.type })}
                   </div>
                 </div>
               </label>
@@ -62,7 +65,7 @@ function PropertiesSection({
             className="btn btn-primary btn-full"
             onClick={onSave}
           >
-            Enregistrer les propriétés sélectionnées
+            {t('config.properties.save')}
           </button>
         </>
       )}
