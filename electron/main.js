@@ -7,6 +7,8 @@ const isDev = require('electron-is-dev');
 let mainWindow;
 let backendProcess;
 const BACKEND_PORT = 5000;
+const BACKEND_STARTUP_MAX_RETRIES = 30;
+const BACKEND_STARTUP_RETRY_INTERVAL = 1000; // ms
 
 // Get the user data directory for the database
 function getUserDataPath() {
@@ -29,10 +31,17 @@ function startBackend() {
     if (isDev) {
       // Development mode: use the Python source
       backendPath = path.join(__dirname, '..', 'backend');
-      pythonExecutable = process.platform === 'win32' ? 'python' : 'python3';
+      
+      // Try to find Python executable - check common names
+      const pythonCommands = process.platform === 'win32' 
+        ? ['python', 'python3', 'py']
+        : ['python3', 'python'];
+      
+      pythonExecutable = pythonCommands[0]; // Default to first option
       
       console.log('Starting backend in development mode...');
       console.log('Backend path:', backendPath);
+      console.log('Python executable:', pythonExecutable);
       console.log('User data path:', userDataPath);
       
       backendProcess = spawn(pythonExecutable, ['app.py'], {
@@ -78,7 +87,7 @@ function startBackend() {
     });
 
     // Wait for backend to be ready
-    const maxRetries = 30;
+    const maxRetries = BACKEND_STARTUP_MAX_RETRIES;
     let retries = 0;
     
     const checkBackend = setInterval(() => {
@@ -108,7 +117,7 @@ function startBackend() {
       });
 
       req.end();
-    }, 1000);
+    }, BACKEND_STARTUP_RETRY_INTERVAL);
   });
 }
 

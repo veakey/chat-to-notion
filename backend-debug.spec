@@ -1,9 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
-# PyInstaller spec file for Chat to Notion backend
-# 
-# This creates a standalone executable of the Flask backend.
-# Console is hidden for production builds for a cleaner user experience.
-# For debugging, use backend-debug.spec which shows the console window.
+# DEBUG VERSION - Shows console window for debugging backend issues
 
 block_cipher = None
 
@@ -46,7 +42,7 @@ exe = EXE(
     upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=False,  # Hide console window for better desktop app experience
+    console=True,  # Show console for debugging
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
