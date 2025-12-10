@@ -1,5 +1,6 @@
 import sqlite3
 import os
+import json
 from contextlib import contextmanager
 
 # Chemin vers la base de données SQLite
@@ -16,6 +17,7 @@ def init_db():
                 database_id TEXT NOT NULL,
                 title_property TEXT,
                 date_property TEXT,
+                additional_properties TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
@@ -27,6 +29,10 @@ def init_db():
             pass  # La colonne existe déjà
         try:
             cursor.execute('ALTER TABLE notion_config ADD COLUMN date_property TEXT')
+        except sqlite3.OperationalError:
+            pass  # La colonne existe déjà
+        try:
+            cursor.execute('ALTER TABLE notion_config ADD COLUMN additional_properties TEXT')
         except sqlite3.OperationalError:
             pass  # La colonne existe déjà
         conn.commit()
@@ -41,10 +47,15 @@ def get_db_connection():
     finally:
         conn.close()
 
-def save_config(api_key, database_id, title_property=None, date_property=None):
+def save_config(api_key, database_id, title_property=None, date_property=None, additional_properties=None):
     """Sauvegarde ou met à jour la configuration Notion"""
     with get_db_connection() as conn:
         cursor = conn.cursor()
+        
+        # Convertir additional_properties en JSON si c'est un dict
+        additional_properties_json = None
+        if additional_properties:
+            additional_properties_json = json.dumps(additional_properties)
         
         # Vérifier si une configuration existe déjà
         cursor.execute('SELECT id FROM notion_config LIMIT 1')
@@ -54,15 +65,15 @@ def save_config(api_key, database_id, title_property=None, date_property=None):
             # Mettre à jour la configuration existante
             cursor.execute('''
                 UPDATE notion_config 
-                SET api_key = ?, database_id = ?, title_property = ?, date_property = ?, updated_at = CURRENT_TIMESTAMP
+                SET api_key = ?, database_id = ?, title_property = ?, date_property = ?, additional_properties = ?, updated_at = CURRENT_TIMESTAMP
                 WHERE id = ?
-            ''', (api_key, database_id, title_property, date_property, existing['id']))
+            ''', (api_key, database_id, title_property, date_property, additional_properties_json, existing['id']))
         else:
             # Créer une nouvelle configuration
             cursor.execute('''
-                INSERT INTO notion_config (api_key, database_id, title_property, date_property)
-                VALUES (?, ?, ?, ?)
-            ''', (api_key, database_id, title_property, date_property))
+                INSERT INTO notion_config (api_key, database_id, title_property, date_property, additional_properties)
+                VALUES (?, ?, ?, ?, ?)
+            ''', (api_key, database_id, title_property, date_property, additional_properties_json))
         
         conn.commit()
 
@@ -70,15 +81,23 @@ def get_config():
     """Récupère la configuration Notion"""
     with get_db_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT api_key, database_id, title_property, date_property FROM notion_config LIMIT 1')
+        cursor.execute('SELECT api_key, database_id, title_property, date_property, additional_properties FROM notion_config LIMIT 1')
         row = cursor.fetchone()
         
         if row:
+            additional_properties = None
+            if row['additional_properties']:
+                try:
+                    additional_properties = json.loads(row['additional_properties'])
+                except json.JSONDecodeError:
+                    additional_properties = {}
+            
             return {
                 'api_key': row['api_key'],
                 'database_id': row['database_id'],
                 'title_property': row['title_property'],
-                'date_property': row['date_property']
+                'date_property': row['date_property'],
+                'additional_properties': additional_properties or {}
             }
         return None
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useToast } from '../contexts/ToastContext';
 
@@ -8,8 +8,56 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
   const [apiKey, setApiKey] = useState('');
   const [databaseId, setDatabaseId] = useState('');
   const [loading, setLoading] = useState(false);
-  const [detectedProperties, setDetectedProperties] = useState(null);
+  const [availableProperties, setAvailableProperties] = useState([]);
+  const [selectedProperties, setSelectedProperties] = useState({});
+  const [loadingProperties, setLoadingProperties] = useState(false);
   const { success, error } = useToast();
+
+  useEffect(() => {
+    if (isConfigured) {
+      loadProperties();
+      loadSelectedProperties();
+    }
+  }, [isConfigured]);
+
+  const loadProperties = async () => {
+    setLoadingProperties(true);
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/config/properties`);
+      setAvailableProperties(response.data.properties || []);
+    } catch (err) {
+      console.error('Erreur lors du chargement des propriétés:', err);
+    } finally {
+      setLoadingProperties(false);
+    }
+  };
+
+  const loadSelectedProperties = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/config`);
+      setSelectedProperties(response.data.additionalProperties || {});
+    } catch (err) {
+      console.error('Erreur lors du chargement de la configuration:', err);
+    }
+  };
+
+  const handlePropertyToggle = (propName) => {
+    setSelectedProperties(prev => ({
+      ...prev,
+      [propName]: !prev[propName]
+    }));
+  };
+
+  const handleSaveProperties = async () => {
+    try {
+      await axios.post(`${API_BASE_URL}/api/config/properties`, {
+        additionalProperties: selectedProperties
+      });
+      success('Propriétés supplémentaires enregistrées avec succès');
+    } catch (err) {
+      error(err.response?.data?.error || 'Erreur lors de l\'enregistrement des propriétés');
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,6 +77,11 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
 
       // Notify parent component
       onConfigSaved();
+      
+      // Charger les propriétés disponibles après la configuration
+      setTimeout(() => {
+        loadProperties();
+      }, 500);
     } catch (err) {
       error(err.response?.data?.error || 'Failed to save configuration');
     } finally {
@@ -139,6 +192,65 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
           </li>
         </ol>
       </div>
+
+      {isConfigured && (
+        <div style={{ marginTop: '30px' }}>
+          <h3 style={{ color: '#ffffff', fontSize: '1.1rem', marginBottom: '15px' }}>
+            ⚙️ Propriétés supplémentaires
+          </h3>
+          <p style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.875rem', marginBottom: '15px' }}>
+            Sélectionnez les propriétés que vous souhaitez utiliser lors de l'envoi de chats vers Notion
+          </p>
+          
+          {loadingProperties ? (
+            <div style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Chargement des propriétés...</div>
+          ) : availableProperties.length === 0 ? (
+            <div style={{ color: 'rgba(255, 255, 255, 0.7)', padding: '15px', background: 'rgba(139, 92, 246, 0.1)', borderRadius: '10px' }}>
+              Aucune propriété supplémentaire disponible dans votre base de données.
+            </div>
+          ) : (
+            <>
+              <div style={{ marginBottom: '15px' }}>
+                {availableProperties.map(prop => (
+                  <label
+                    key={prop.name}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '10px',
+                      marginBottom: '8px',
+                      background: 'rgba(139, 92, 246, 0.1)',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      border: selectedProperties[prop.name] ? '1px solid #c4b5fd' : '1px solid transparent'
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedProperties[prop.name] || false}
+                      onChange={() => handlePropertyToggle(prop.name)}
+                      style={{ marginRight: '10px', cursor: 'pointer' }}
+                    />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ color: '#ffffff', fontWeight: '500' }}>{prop.name}</div>
+                      <div style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '0.8rem' }}>
+                        Type: {prop.type}
+                      </div>
+                    </div>
+                  </label>
+                ))}
+              </div>
+              <button
+                type="button"
+                className="btn btn-primary btn-full"
+                onClick={handleSaveProperties}
+              >
+                Enregistrer les propriétés sélectionnées
+              </button>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }
