@@ -1,36 +1,36 @@
-# Tests Backend
+# Backend Tests
 
 ## Structure
 
-- `unit/` : Tests unitaires pour les modules individuels
-- `functional/` : Tests fonctionnels pour les routes API
+- `unit/` : Unit tests for individual modules
+- `functional/` : Functional tests for API routes
 
-## Exécution
+## Running Tests
 
 ```bash
-# Tous les tests
+# Run all tests
 pytest
 
-# Avec couverture
+# With coverage
 pytest --cov=. --cov-report=html
 
-# Tests unitaires uniquement
+# Unit tests only
 pytest tests/unit/
 
-# Tests fonctionnels uniquement
+# Functional tests only
 pytest tests/functional/
 
-# Un fichier spécifique
+# Specific file
 pytest tests/unit/test_property_formatter.py
 ```
 
-## Tests disponibles
+## Available Tests
 
-### Tests unitaires
-- `test_property_formatter.py` : Formatage des propriétés Notion
-- `test_chunk_splitter.py` : Division du contenu en chunks
-- `test_chat_parser.py` : Parsing du contenu de chat
+### Unit Tests
+- `test_property_formatter.py` : Notion property formatting
+- `test_chunk_splitter.py` : Content chunk splitting
+- `test_chat_parser.py` : Chat content parsing
 
-### Tests fonctionnels
-- `test_config_routes.py` : Routes de configuration
+### Functional Tests
+- `test_config_routes.py` : Configuration routes
 

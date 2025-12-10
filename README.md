@@ -318,7 +318,7 @@ Planned features for future releases:
 - 🔄 **Auto-detection**: Automatic format detection and parsing
 - 📊 **Advanced Parsing**: Intelligent content extraction from various formats
 - 🎯 **Custom Mapping**: Configurable field mapping for structured data
-- 🌍 **More Languages**: Spanish, German, and other languages based on community demand
+- 🌍 **More Languages**: Spanish and other languages based on community demand
 
 ## Contributing
 

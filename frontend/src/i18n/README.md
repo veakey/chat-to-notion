@@ -1,34 +1,38 @@
-# Guide d'internationalisation (i18n)
+# Internationalization (i18n) Guide
 
-Ce projet utilise `react-i18next` pour gérer les traductions multilingues.
+This project uses `react-i18next` to manage multilingual translations.
 
 ## Structure
 
 ```
 src/
 ├── i18n/
-│   ├── config.js          # Configuration i18next
-│   └── README.md          # Ce fichier
+│   ├── config.js          # i18next configuration
+│   └── README.md          # This file
 └── locales/
     ├── fr/
-    │   └── translation.json  # Traductions françaises
-    └── en/
-        └── translation.json  # Traductions anglaises
+    │   └── translation.json  # French translations
+    ├── en/
+    │   └── translation.json  # English translations
+    ├── de/
+    │   └── translation.json  # German translations
+    └── it/
+        └── translation.json  # Italian translations
 ```
 
-## Ajouter une nouvelle langue
+## Adding a New Language
 
-### 1. Créer le fichier de traduction
+### 1. Create the Translation File
 
-Créez un nouveau dossier dans `src/locales/` avec le code de langue (ex: `es` pour l'espagnol, `de` pour l'allemand) :
+Create a new folder in `src/locales/` with the language code (e.g., `es` for Spanish, `pt` for Portuguese):
 
 ```bash
 mkdir -p src/locales/es
 ```
 
-### 2. Créer le fichier translation.json
+### 2. Create the translation.json File
 
-Copiez le contenu de `src/locales/en/translation.json` et traduisez toutes les valeurs (gardez les clés identiques) :
+Copy the content from `src/locales/en/translation.json` and translate all values (keep the keys identical):
 
 ```json
 {
@@ -40,9 +44,9 @@ Copiez le contenu de `src/locales/en/translation.json` et traduisez toutes les v
 }
 ```
 
-### 3. Enregistrer la langue dans config.js
+### 3. Register the Language in config.js
 
-Ajoutez l'import et la ressource dans `src/i18n/config.js` :
+Add the import and resource in `src/i18n/config.js`:
 
 ```javascript
 import translationES from '../locales/es/translation.json';
@@ -58,28 +62,28 @@ i18n
         translation: translationEN
       },
       es: {
-        translation: translationES  // Ajoutez cette ligne
+        translation: translationES  // Add this line
       }
     },
     // ...
   });
 ```
 
-### 4. Ajouter au sélecteur de langue
+### 4. Add to Language Selector
 
-Modifiez `src/components/LanguageSelector.js` pour ajouter l'option :
+Modify `src/components/LanguageSelector.js` to add the option:
 
 ```javascript
 <select value={i18n.language} onChange={(e) => changeLanguage(e.target.value)}>
   <option value="fr">🇫🇷 Français</option>
   <option value="en">🇬🇧 English</option>
-  <option value="es">🇪🇸 Español</option>  {/* Ajoutez cette ligne */}
+  <option value="es">🇪🇸 Español</option>  {/* Add this line */}
 </select>
 ```
 
-### 5. Mettre à jour la détection automatique
+### 5. Update Automatic Detection
 
-Modifiez la fonction `getInitialLanguage()` dans `src/i18n/config.js` pour détecter la nouvelle langue :
+Modify the `getInitialLanguage()` function in `src/i18n/config.js` to detect the new language:
 
 ```javascript
 const getInitialLanguage = () => {
@@ -92,16 +96,16 @@ const getInitialLanguage = () => {
   if (browserLanguage.startsWith('fr')) {
     return 'fr';
   }
-  if (browserLanguage.startsWith('es')) {  // Ajoutez cette condition
+  if (browserLanguage.startsWith('es')) {  // Add this condition
     return 'es';
   }
   return 'en';
 };
 ```
 
-## Utilisation dans les composants
+## Usage in Components
 
-### Hook useTranslation
+### useTranslation Hook
 
 ```javascript
 import { useTranslation } from 'react-i18next';
@@ -113,31 +117,31 @@ function MyComponent() {
 }
 ```
 
-### Interpolation de variables
+### Variable Interpolation
 
 ```javascript
-// Dans translation.json
+// In translation.json
 {
-  "greeting": "Bonjour {{name}}"
+  "greeting": "Hello {{name}}"
 }
 
-// Dans le composant
+// In component
 {t('greeting', { name: 'John' })}
 ```
 
-### Composants React dans les traductions
+### React Components in Translations
 
-Utilisez le composant `Trans` pour inclure des éléments React :
+Use the `Trans` component to include React elements:
 
 ```javascript
 import { Trans } from 'react-i18next';
 
-// Dans translation.json
+// In translation.json
 {
-  "link": "Visitez notre <link>site web</link>"
+  "link": "Visit our <link>website</link>"
 }
 
-// Dans le composant
+// In component
 <Trans
   i18nKey="link"
   components={{
@@ -146,27 +150,26 @@ import { Trans } from 'react-i18next';
 />
 ```
 
-## Traduire les messages d'erreur du backend
+## Translating Backend Error Messages
 
-Les messages d'erreur du backend sont traduits automatiquement via `src/utils/errorTranslator.js`. 
+Backend error messages are automatically translated via `src/utils/errorTranslator.js`.
 
-Pour ajouter la traduction d'un nouveau message d'erreur :
+To add translation for a new error message:
 
-1. Ajoutez la clé dans les fichiers de traduction (`errors.newError`)
-2. Ajoutez le mapping dans `errorTranslator.js`
+1. Add the key in translation files (`errors.newError`)
+2. Add the mapping in `errorTranslator.js`
 
-## Bonnes pratiques
+## Best Practices
 
-1. **Toujours utiliser des clés descriptives** : `chat.form.submit` plutôt que `submit`
-2. **Grouper par contexte** : `config.form.apiKeyLabel` plutôt que `apiKeyLabel`
-3. **Éviter les traductions hardcodées** : Utilisez toujours `t()` même pour les textes courts
-4. **Tester toutes les langues** : Vérifiez que toutes les traductions s'affichent correctement
-5. **Garder les clés synchronisées** : Tous les fichiers de traduction doivent avoir les mêmes clés
+1. **Always use descriptive keys**: `chat.form.submit` rather than `submit`
+2. **Group by context**: `config.form.apiKeyLabel` rather than `apiKeyLabel`
+3. **Avoid hardcoded translations**: Always use `t()` even for short texts
+4. **Test all languages**: Verify that all translations display correctly
+5. **Keep keys synchronized**: All translation files must have the same keys
 
-## Langues supportées
+## Supported Languages
 
-- 🇫🇷 Français (fr) - Langue par défaut
+- 🇫🇷 Français (fr) - Default language
 - 🇬🇧 English (en)
 - 🇩🇪 Deutsch (de)
 - 🇮🇹 Italiano (it)
-

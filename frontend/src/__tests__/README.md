@@ -1,28 +1,28 @@
-# Tests Frontend
+# Frontend Tests
 
 ## Structure
 
-- `components/` : Tests des composants React
-- `hooks/` : Tests des hooks personnalisés
+- `components/` : React component tests
+- `hooks/` : Custom hooks tests
 
-## Exécution
+## Running Tests
 
 ```bash
-# Tous les tests
+# Run all tests
 npm test
 
-# En mode watch
+# Watch mode
 npm test -- --watch
 
-# Avec couverture
+# With coverage
 npm test -- --coverage
 ```
 
-## Tests disponibles
+## Available Tests
 
-### Tests de composants
-- `ChatPage.test.js` : Tests du composant principal de chat
+### Component Tests
+- `ChatPage.test.js` : Main chat component tests
 
-### Tests de hooks
-- `useChatForm.test.js` : Tests du hook de formulaire
+### Hook Tests
+- `useChatForm.test.js` : Form hook tests
 
