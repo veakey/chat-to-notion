@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useToast } from '../contexts/ToastContext';
 
@@ -8,7 +8,42 @@ function ChatPage({ isConfigured }) {
   const [content, setContent] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [loading, setLoading] = useState(false);
+  const [availableProperties, setAvailableProperties] = useState([]);
+  const [selectedProperties, setSelectedProperties] = useState({});
+  const [propertyValues, setPropertyValues] = useState({});
   const { success, error, info } = useToast();
+
+  useEffect(() => {
+    if (isConfigured) {
+      loadProperties();
+    }
+  }, [isConfigured]);
+
+  const loadProperties = async () => {
+    try {
+      const [propertiesResponse, configResponse] = await Promise.all([
+        axios.get(`${API_BASE_URL}/api/config/properties`),
+        axios.get(`${API_BASE_URL}/api/config`)
+      ]);
+      
+      const allProperties = propertiesResponse.data.properties || [];
+      const selected = configResponse.data.additionalProperties || {};
+      
+      setAvailableProperties(allProperties);
+      setSelectedProperties(selected);
+      
+      // Initialiser les valeurs des propriétés sélectionnées
+      const initialValues = {};
+      allProperties.forEach(prop => {
+        if (selected[prop.name]) {
+          initialValues[prop.name] = '';
+        }
+      });
+      setPropertyValues(initialValues);
+    } catch (err) {
+      console.error('Erreur lors du chargement des propriétés:', err);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,9 +56,18 @@ function ChatPage({ isConfigured }) {
     setLoading(true);
 
     try {
+      // Filtrer les valeurs des propriétés pour ne garder que celles qui sont remplies
+      const filledProperties = {};
+      Object.keys(propertyValues).forEach(propName => {
+        if (propertyValues[propName] && propertyValues[propName].trim()) {
+          filledProperties[propName] = propertyValues[propName];
+        }
+      });
+
       const response = await axios.post(`${API_BASE_URL}/api/chat`, {
         content,
         date,
+        additionalProperties: filledProperties,
       });
 
       success(response.data.message);
@@ -31,6 +75,12 @@ function ChatPage({ isConfigured }) {
       // Clear form
       setContent('');
       setDate(new Date().toISOString().split('T')[0]);
+      // Réinitialiser les valeurs des propriétés
+      const resetValues = {};
+      Object.keys(propertyValues).forEach(propName => {
+        resetValues[propName] = '';
+      });
+      setPropertyValues(resetValues);
     } catch (err) {
       error(err.response?.data?.error || 'Échec de l\'envoi du chat vers Notion');
     } finally {
@@ -72,6 +122,51 @@ function ChatPage({ isConfigured }) {
             required
           />
         </div>
+
+        {Object.keys(selectedProperties).some(name => selectedProperties[name]) && (
+          <div style={{ marginTop: '20px', padding: '15px', background: 'rgba(139, 92, 246, 0.1)', borderRadius: '10px' }}>
+            <h3 style={{ color: '#ffffff', fontSize: '1rem', marginBottom: '15px' }}>
+              Propriétés supplémentaires
+            </h3>
+            {availableProperties
+              .filter(prop => selectedProperties[prop.name])
+              .map(prop => (
+                <div key={prop.name} className="form-group" style={{ marginBottom: '15px' }}>
+                  <label className="form-label">{prop.name}</label>
+                  {prop.type === 'checkbox' ? (
+                    <input
+                      type="checkbox"
+                      checked={propertyValues[prop.name] === 'true' || propertyValues[prop.name] === true}
+                      onChange={(e) => setPropertyValues(prev => ({ ...prev, [prop.name]: e.target.checked }))}
+                      style={{ width: '20px', height: '20px', cursor: 'pointer' }}
+                    />
+                  ) : prop.type === 'number' ? (
+                    <input
+                      type="number"
+                      className="form-input"
+                      value={propertyValues[prop.name] || ''}
+                      onChange={(e) => setPropertyValues(prev => ({ ...prev, [prop.name]: e.target.value }))}
+                    />
+                  ) : prop.type === 'date' ? (
+                    <input
+                      type="date"
+                      className="form-input"
+                      value={propertyValues[prop.name] || ''}
+                      onChange={(e) => setPropertyValues(prev => ({ ...prev, [prop.name]: e.target.value }))}
+                    />
+                  ) : (
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder={`Saisissez une valeur pour ${prop.name} (${prop.type})`}
+                      value={propertyValues[prop.name] || ''}
+                      onChange={(e) => setPropertyValues(prev => ({ ...prev, [prop.name]: e.target.value }))}
+                    />
+                  )}
+                </div>
+              ))}
+          </div>
+        )}
 
         <button
           type="submit"
