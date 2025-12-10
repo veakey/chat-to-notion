@@ -93,7 +93,9 @@
   "language": {
     "selector": "Langue",
     "french": "Français",
-    "english": "English"
+    "english": "English",
+    "german": "Deutsch",
+    "italian": "Italiano"
   },
   "dynamicField": {
     "propertyName": "Nom de la propriété",

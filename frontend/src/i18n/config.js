@@ -2,6 +2,8 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import translationFR from '../locales/fr/translation.json';
 import translationEN from '../locales/en/translation.json';
+import translationDE from '../locales/de/translation.json';
+import translationIT from '../locales/it/translation.json';
 
 // Détecter la langue du navigateur ou récupérer depuis localStorage
 const getInitialLanguage = () => {
@@ -15,6 +17,12 @@ const getInitialLanguage = () => {
   if (browserLanguage.startsWith('fr')) {
     return 'fr';
   }
+  if (browserLanguage.startsWith('de')) {
+    return 'de';
+  }
+  if (browserLanguage.startsWith('it')) {
+    return 'it';
+  }
   return 'en';
 };
 
@@ -27,6 +35,12 @@ i18n
       },
       en: {
         translation: translationEN
+      },
+      de: {
+        translation: translationDE
+      },
+      it: {
+        translation: translationIT
       }
     },
     lng: getInitialLanguage(),

@@ -300,6 +300,8 @@ The application supports multiple languages with automatic browser language dete
 
 - 🇫🇷 **French** (default)
 - 🇬🇧 **English**
+- 🇩🇪 **German** (Deutsch)
+- 🇮🇹 **Italian** (Italiano)
 
 You can change the language using the language selector in the top-right corner of the interface. Your language preference is saved in localStorage.
 
