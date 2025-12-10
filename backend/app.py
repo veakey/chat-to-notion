@@ -5,16 +5,13 @@ import os
 import json
 from datetime import datetime
 import re
+from db import init_db, save_config, get_config
 
 app = Flask(__name__)
 CORS(app)
 
-# In-memory storage for Notion configuration
-# WARNING: This is for development only. In production:
-# 1. Use environment variables or a secure secrets manager
-# 2. Encrypt sensitive data at rest
-# 3. Use a proper database with access controls
-notion_config = {}
+# Initialiser la base de données SQLite au démarrage
+init_db()
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
@@ -22,7 +19,7 @@ def health_check():
     return jsonify({"status": "healthy"}), 200
 
 @app.route('/api/config', methods=['POST'])
-def save_config():
+def save_config_endpoint():
     """Save Notion API configuration"""
     try:
         data = request.json
@@ -38,8 +35,8 @@ def save_config():
             # Test the connection by retrieving the database
             notion.databases.retrieve(database_id=database_id)
             
-            notion_config['api_key'] = api_key
-            notion_config['database_id'] = database_id
+            # Sauvegarder dans SQLite
+            save_config(api_key, database_id)
             
             return jsonify({"message": "Configuration saved successfully"}), 200
         except Exception as e:
@@ -49,19 +46,21 @@ def save_config():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/config', methods=['GET'])
-def get_config():
+def get_config_endpoint():
     """Get current Notion configuration status"""
-    has_config = 'api_key' in notion_config and 'database_id' in notion_config
+    config = get_config()
+    is_configured = config is not None
     return jsonify({
-        "configured": has_config,
-        "databaseId": notion_config.get('database_id', '') if has_config else ''
+        "configured": is_configured,
+        "databaseId": config.get('database_id', '') if config else ''
     }), 200
 
 @app.route('/api/chat', methods=['POST'])
 def process_chat():
     """Process and send chat data to Notion"""
     try:
-        if 'api_key' not in notion_config or 'database_id' not in notion_config:
+        config = get_config()
+        if not config:
             return jsonify({"error": "Notion not configured. Please configure API credentials first."}), 400
         
         data = request.json
@@ -75,11 +74,11 @@ def process_chat():
         parsed_data = parse_chat(chat_content, chat_date)
         
         # Send to Notion
-        notion = Client(auth=notion_config['api_key'])
+        notion = Client(auth=config['api_key'])
         
         # Create a page in the database
         response = notion.pages.create(
-            parent={"database_id": notion_config['database_id']},
+            parent={"database_id": config['database_id']},
             properties={
                 "Name": {
                     "title": [
