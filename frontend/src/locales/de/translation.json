@@ -58,7 +58,7 @@
     },
     "dynamicFields": {
       "title": "Dynamische Felder ({{count}}/10)",
-      "add": "+ Feld hinzufügen",
+      "add": "Feld hinzufügen",
       "maxReached": "Maximal 10 dynamische Felder erlaubt"
     },
     "propertyFields": {

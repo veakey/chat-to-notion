@@ -58,7 +58,7 @@
     },
     "dynamicFields": {
       "title": "Champs dynamiques ({{count}}/10)",
-      "add": "+ Ajouter un champ",
+      "add": "Ajouter un champ",
       "maxReached": "Maximum 10 champs dynamiques autorisés"
     },
     "propertyFields": {

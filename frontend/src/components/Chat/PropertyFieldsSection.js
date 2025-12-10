@@ -322,17 +322,18 @@ function PropertyFieldsSection({
             onClick={handleRefreshClick}
             disabled={disabled || loadingProperties}
             style={{
-              padding: '6px 12px',
-              fontSize: '0.75rem',
+              padding: '12px 16px',
+              fontSize: '0.875rem',
               background: 'rgba(139, 92, 246, 0.3)',
               border: '1px solid rgba(196, 181, 253, 0.5)',
-              borderRadius: '6px',
+              borderRadius: '8px',
               color: '#ffffff',
               cursor: disabled || loadingProperties ? 'not-allowed' : 'pointer',
               opacity: disabled || loadingProperties ? 0.5 : 1,
               display: 'flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '6px',
+              minHeight: '44px'
             }}
             title={t('chat.propertyFields.refreshTooltip')}
           >
@@ -344,18 +345,19 @@ function PropertyFieldsSection({
               onClick={() => setShowAvailableProperties(!showAvailableProperties)}
               disabled={disabled}
               style={{
-                padding: '6px 12px',
-                fontSize: '0.75rem',
+                padding: '12px 16px',
+                fontSize: '0.875rem',
                 background: 'rgba(34, 197, 94, 0.3)',
                 border: '1px solid rgba(34, 197, 94, 0.5)',
-                borderRadius: '6px',
+                borderRadius: '8px',
                 color: '#ffffff',
-              cursor: disabled ? 'not-allowed' : 'pointer',
-              opacity: disabled ? 0.5 : 1,
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
+                cursor: disabled ? 'not-allowed' : 'pointer',
+                opacity: disabled ? 0.5 : 1,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                minHeight: '44px'
+              }}
           >
             <PlusIcon className="icon-sm" />
             {t('chat.propertyFields.addFields')} ({unselectedProperties.length})
