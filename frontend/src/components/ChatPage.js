@@ -95,7 +95,7 @@ function ChatPage({ isConfigured }) {
         </button>
       </form>
 
-      <div style={{ marginTop: '30px', padding: '15px', background: 'rgba(59, 130, 246, 0.2)', borderRadius: '10px' }}>
+      <div style={{ marginTop: '30px', padding: '15px', background: 'rgba(139, 92, 246, 0.2)', borderRadius: '10px', border: '1px solid rgba(196, 181, 253, 0.3)' }}>
         <h3 style={{ color: '#ffffff', fontSize: '1rem', marginBottom: '10px' }}>
           💡 Tips
         </h3>
