@@ -1,0 +1,91 @@
+{
+  "name": "chat-to-notion",
+  "version": "1.0.0",
+  "description": "Desktop application to send chat conversations to Notion",
+  "main": "electron/main.js",
+  "scripts": {
+    "electron:dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\" \"wait-on http://localhost:5000/api/health http://localhost:3000 && electron .\"",
+    "electron:build": "npm run frontend:build && electron-builder",
+    "electron:build:win": "npm run frontend:build && electron-builder --win",
+    "electron:build:mac": "npm run frontend:build && electron-builder --mac",
+    "electron:build:linux": "npm run frontend:build && electron-builder --linux",
+    "backend:dev": "cd backend && python3 app.py",
+    "frontend:dev": "cd frontend && npm start",
+    "frontend:build": "cd frontend && npm run build",
+    "postinstall": "cd frontend && npm install"
+  },
+  "keywords": [
+    "electron",
+    "notion",
+    "chat",
+    "desktop"
+  ],
+  "author": "veakey",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1",
+    "electron-is-dev": "^2.0.0",
+    "concurrently": "^8.2.2",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.veakey.chattonotion",
+    "productName": "Chat to Notion",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron/**/*",
+      "frontend/build/**/*",
+      "logo.png",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "backend-dist",
+        "to": "backend",
+        "filter": ["**/*"]
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "logo.png"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "icon": "logo.png",
+      "category": "public.app-category.productivity"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        },
+        {
+          "target": "deb",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "logo.png",
+      "category": "Utility"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}
