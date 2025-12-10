@@ -39,14 +39,14 @@ function App() {
         <div className="background"></div>
         <ToastContainer />
         <div className="container">
-          <h1 className="app-title">Chat to Notion</h1>
+          <h1 className="app-title">Chat vers Notion</h1>
           <p className="app-subtitle">
-            Send your chat conversations to Notion with ease
+            Envoyez vos conversations de chat vers Notion en toute simplicité
           </p>
 
           {loading ? (
             <div className="glass-card">
-              <div className="loading">Loading...</div>
+              <div className="loading">Chargement...</div>
             </div>
           ) : (
             <>
@@ -55,7 +55,7 @@ function App() {
                   className={`tab-button ${activeTab === 'chat' ? 'active' : ''}`}
                   onClick={() => setActiveTab('chat')}
                 >
-                  📝 Send Chat
+                  📝 Envoyer un chat
                 </button>
                 <button
                   className={`tab-button ${activeTab === 'config' ? 'active' : ''}`}

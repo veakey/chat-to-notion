@@ -14,10 +14,21 @@ def init_db():
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 api_key TEXT NOT NULL,
                 database_id TEXT NOT NULL,
+                title_property TEXT,
+                date_property TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
+        # Ajouter les colonnes si elles n'existent pas (pour les migrations)
+        try:
+            cursor.execute('ALTER TABLE notion_config ADD COLUMN title_property TEXT')
+        except sqlite3.OperationalError:
+            pass  # La colonne existe déjà
+        try:
+            cursor.execute('ALTER TABLE notion_config ADD COLUMN date_property TEXT')
+        except sqlite3.OperationalError:
+            pass  # La colonne existe déjà
         conn.commit()
 
 @contextmanager
@@ -30,7 +41,7 @@ def get_db_connection():
     finally:
         conn.close()
 
-def save_config(api_key, database_id):
+def save_config(api_key, database_id, title_property=None, date_property=None):
     """Sauvegarde ou met à jour la configuration Notion"""
     with get_db_connection() as conn:
         cursor = conn.cursor()
@@ -43,15 +54,15 @@ def save_config(api_key, database_id):
             # Mettre à jour la configuration existante
             cursor.execute('''
                 UPDATE notion_config 
-                SET api_key = ?, database_id = ?, updated_at = CURRENT_TIMESTAMP
+                SET api_key = ?, database_id = ?, title_property = ?, date_property = ?, updated_at = CURRENT_TIMESTAMP
                 WHERE id = ?
-            ''', (api_key, database_id, existing['id']))
+            ''', (api_key, database_id, title_property, date_property, existing['id']))
         else:
             # Créer une nouvelle configuration
             cursor.execute('''
-                INSERT INTO notion_config (api_key, database_id)
-                VALUES (?, ?)
-            ''', (api_key, database_id))
+                INSERT INTO notion_config (api_key, database_id, title_property, date_property)
+                VALUES (?, ?, ?, ?)
+            ''', (api_key, database_id, title_property, date_property))
         
         conn.commit()
 
@@ -59,13 +70,15 @@ def get_config():
     """Récupère la configuration Notion"""
     with get_db_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT api_key, database_id FROM notion_config LIMIT 1')
+        cursor.execute('SELECT api_key, database_id, title_property, date_property FROM notion_config LIMIT 1')
         row = cursor.fetchone()
         
         if row:
             return {
                 'api_key': row['api_key'],
-                'database_id': row['database_id']
+                'database_id': row['database_id'],
+                'title_property': row['title_property'],
+                'date_property': row['date_property']
             }
         return None
 
