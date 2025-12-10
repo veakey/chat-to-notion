@@ -1,38 +1,26 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { LanguageIcon } from '@heroicons/react/24/outline';
 
 function LanguageSelector() {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
   };
 
   return (
-    <div style={{ 
-      position: 'absolute', 
-      top: '20px', 
-      right: '20px',
-      zIndex: 1000
-    }}>
+    <div className="language-selector-container">
+      <LanguageIcon className="language-selector-icon" />
       <select
         value={i18n.language}
         onChange={(e) => changeLanguage(e.target.value)}
-        style={{
-          padding: '8px 12px',
-          background: 'rgba(139, 92, 246, 0.3)',
-          border: '1px solid rgba(196, 181, 253, 0.5)',
-          borderRadius: '8px',
-          color: '#ffffff',
-          fontSize: '0.875rem',
-          cursor: 'pointer',
-          outline: 'none'
-        }}
+        className="language-selector"
       >
-        <option value="fr">🇫🇷 Français</option>
-        <option value="en">🇬🇧 English</option>
-        <option value="de">🇩🇪 Deutsch</option>
-        <option value="it">🇮🇹 Italiano</option>
+        <option value="fr">{t('language.french')}</option>
+        <option value="en">{t('language.english')}</option>
+        <option value="de">{t('language.german')}</option>
+        <option value="it">{t('language.italian')}</option>
       </select>
     </div>
   );

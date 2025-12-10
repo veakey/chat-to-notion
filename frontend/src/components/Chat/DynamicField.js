@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { XMarkIcon } from '@heroicons/react/24/solid';
 
 function DynamicField({ field, onUpdate, onRemove, isMissing, disabled }) {
   const { t } = useTranslation();
@@ -109,7 +110,7 @@ function DynamicField({ field, onUpdate, onRemove, isMissing, disabled }) {
             cursor: disabled ? 'not-allowed' : 'pointer'
           }}
         >
-          ✕
+          <XMarkIcon className="icon-md" />
         </button>
       </div>
       {isMissing && (

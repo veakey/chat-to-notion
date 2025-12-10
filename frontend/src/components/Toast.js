@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { CheckCircleIcon, XCircleIcon, InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/solid';
 
 function Toast({ toast, onClose }) {
   useEffect(() => {
@@ -12,13 +13,13 @@ function Toast({ toast, onClose }) {
   const getIcon = () => {
     switch (toast.type) {
       case 'success':
-        return '✓';
+        return <CheckCircleIcon className="toast-icon-svg" />;
       case 'error':
-        return '✗';
+        return <XCircleIcon className="toast-icon-svg" />;
       case 'info':
-        return 'ℹ';
+        return <InformationCircleIcon className="toast-icon-svg" />;
       default:
-        return 'ℹ';
+        return <InformationCircleIcon className="toast-icon-svg" />;
     }
   };
 
@@ -28,8 +29,8 @@ function Toast({ toast, onClose }) {
         <span className="toast-icon">{getIcon()}</span>
         <span className="toast-message">{toast.message}</span>
       </div>
-      <button className="toast-close" onClick={onClose}>
-        ×
+      <button className="toast-close" onClick={onClose} aria-label="Close">
+        <XMarkIcon className="toast-close-icon" />
       </button>
     </div>
   );

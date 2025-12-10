@@ -3,6 +3,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ExclamationTriangleIcon, ChartBarIcon, ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import PropertyDetails from './PropertyDetails';
 
@@ -70,7 +71,7 @@ function DatabaseStructureView() {
         borderRadius: '8px',
         border: '1px solid rgba(239, 68, 68, 0.3)'
       }}>
-        ⚠️ {error}
+        <ExclamationTriangleIcon className="icon-md icon-inline icon-mr-2" /> {error}
       </div>
     );
   }
@@ -98,12 +99,11 @@ function DatabaseStructureView() {
         }}
         onClick={() => setExpanded(!expanded)}
       >
-        <h3 style={{ color: '#ffffff', fontSize: '1rem', margin: 0 }}>
-          📊 Database Structure
+        <h3 style={{ color: '#ffffff', fontSize: '1rem', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <ChartBarIcon className="icon-md" />
+          Database Structure
         </h3>
-        <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.875rem' }}>
-          {expanded ? '▼' : '▶'}
-        </span>
+        {expanded ? <ChevronDownIcon className="icon-md" style={{ color: 'rgba(255, 255, 255, 0.7)' }} /> : <ChevronRightIcon className="icon-md" style={{ color: 'rgba(255, 255, 255, 0.7)' }} />}
       </div>
 
       {expanded && (

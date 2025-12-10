@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { useTranslation, Trans } from 'react-i18next';
+import { CheckIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 
 function ConfigForm({ apiKey, setApiKey, databaseId, setDatabaseId, onSubmit, loading }) {
   const { t } = useTranslation();
@@ -56,8 +57,19 @@ function ConfigForm({ apiKey, setApiKey, databaseId, setDatabaseId, onSubmit, lo
         type="submit"
         className="btn btn-primary btn-full"
         disabled={loading}
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
       >
-        {loading ? t('config.form.submitLoading') : t('config.form.submit')}
+        {loading ? (
+          <>
+            <ArrowPathIcon className="icon-md spinning-icon" />
+            {t('config.form.submitLoading')}
+          </>
+        ) : (
+          <>
+            <CheckIcon className="icon-md" />
+            {t('config.form.submit')}
+          </>
+        )}
       </button>
     </form>
   );

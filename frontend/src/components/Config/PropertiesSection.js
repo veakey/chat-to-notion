@@ -3,6 +3,17 @@
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { 
+  DocumentTextIcon, 
+  HashtagIcon, 
+  ListBulletIcon, 
+  CalendarIcon, 
+  CheckIcon, 
+  LinkIcon, 
+  EnvelopeIcon, 
+  PhoneIcon,
+  ChartBarIcon
+} from '@heroicons/react/24/outline';
 import DatabaseStructureView from './DatabaseStructureView';
 import PropertyDetails from './PropertyDetails';
 
@@ -16,21 +27,22 @@ function PropertiesSection({
   const { t } = useTranslation();
   
   const getTypeIcon = (type) => {
+    const iconClass = "icon-md";
     const icons = {
-      'title': '📝',
-      'rich_text': '📄',
-      'number': '🔢',
-      'select': '📋',
-      'multi_select': '📋',
-      'date': '📅',
-      'checkbox': '☑️',
-      'url': '🔗',
-      'email': '📧',
-      'phone_number': '📞',
-      'relation': '🔗',
-      'rollup': '📊'
+      'title': <DocumentTextIcon className={iconClass} />,
+      'rich_text': <DocumentTextIcon className={iconClass} />,
+      'number': <HashtagIcon className={iconClass} />,
+      'select': <ListBulletIcon className={iconClass} />,
+      'multi_select': <ListBulletIcon className={iconClass} />,
+      'date': <CalendarIcon className={iconClass} />,
+      'checkbox': <CheckIcon className={iconClass} />,
+      'url': <LinkIcon className={iconClass} />,
+      'email': <EnvelopeIcon className={iconClass} />,
+      'phone_number': <PhoneIcon className={iconClass} />,
+      'relation': <LinkIcon className={iconClass} />,
+      'rollup': <ChartBarIcon className={iconClass} />
     };
-    return icons[type] || '📌';
+    return icons[type] || <DocumentTextIcon className={iconClass} />;
   };
   
   return (
@@ -130,7 +142,9 @@ function PropertiesSection({
             type="button"
             className="btn btn-primary btn-full"
             onClick={onSave}
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
           >
+            <CheckIcon className="icon-md" />
             {t('config.properties.save')}
           </button>
         </>

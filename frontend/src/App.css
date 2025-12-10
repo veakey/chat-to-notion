@@ -46,8 +46,8 @@
 /* Glass UI Card Styling */
 .glass-card {
   background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   border-radius: 20px;
   border: 1px solid rgba(196, 181, 253, 0.3);
   box-shadow: 0 8px 32px 0 rgba(139, 92, 246, 0.3);
@@ -98,7 +98,7 @@
   width: 100%;
   padding: 12px 16px;
   background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(30px);
   border: 1px solid rgba(196, 181, 253, 0.4);
   border-radius: 10px;
   color: #ffffff;
@@ -138,7 +138,7 @@
 .btn {
   padding: 12px 24px;
   background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(30px);
   border: 1px solid rgba(196, 181, 253, 0.3);
   border-radius: 10px;
   color: #ffffff;
@@ -187,7 +187,7 @@
   flex: 1;
   padding: 12px 20px;
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(30px);
   border: 1px solid rgba(196, 181, 253, 0.3);
   border-radius: 10px;
   color: rgba(255, 255, 255, 0.9);
@@ -196,6 +196,15 @@
   cursor: pointer;
   transition: all 0.3s ease;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.tab-icon {
+  width: 20px;
+  height: 20px;
 }
 
 .tab-button:hover {
@@ -216,7 +225,7 @@
   padding: 12px 16px;
   border-radius: 10px;
   margin-bottom: 15px;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(30px);
   font-weight: 500;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
@@ -246,7 +255,7 @@
   border-radius: 20px;
   font-size: 0.875rem;
   font-weight: 600;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(30px);
 }
 
 .status-configured {
@@ -285,8 +294,8 @@
 /* Toast */
 .toast {
   background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   border-radius: 12px;
   border: 1px solid rgba(196, 181, 253, 0.3);
   box-shadow: 0 8px 32px 0 rgba(139, 92, 246, 0.3);
@@ -327,8 +336,6 @@
 }
 
 .toast-icon {
-  font-size: 1.2rem;
-  font-weight: 700;
   width: 24px;
   height: 24px;
   display: flex;
@@ -336,6 +343,11 @@
   justify-content: center;
   border-radius: 50%;
   flex-shrink: 0;
+}
+
+.toast-icon-svg {
+  width: 24px;
+  height: 24px;
 }
 
 .toast-message {
@@ -350,8 +362,6 @@
   background: transparent;
   border: none;
   color: rgba(255, 255, 255, 0.8);
-  font-size: 1.5rem;
-  font-weight: 300;
   cursor: pointer;
   padding: 0;
   width: 24px;
@@ -362,7 +372,11 @@
   border-radius: 4px;
   transition: all 0.2s ease;
   flex-shrink: 0;
-  line-height: 1;
+}
+
+.toast-close-icon {
+  width: 20px;
+  height: 20px;
 }
 
 .toast-close:hover {
@@ -399,4 +413,151 @@
   background: rgba(139, 92, 246, 0.3);
   color: #a78bfa;
   text-shadow: 0 0 8px rgba(139, 92, 246, 0.5);
+}
+
+/* Language Selector */
+.language-selector-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.language-selector-icon {
+  width: 20px;
+  height: 20px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.language-selector {
+  padding: 8px 12px;
+  padding-right: 32px;
+  background: rgba(139, 92, 246, 0.4);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(196, 181, 253, 0.6);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.language-selector:hover {
+  background-color: rgba(139, 92, 246, 0.5);
+  border-color: rgba(196, 181, 253, 0.8);
+}
+
+.language-selector:focus {
+  background-color: rgba(139, 92, 246, 0.5);
+  border-color: rgba(196, 181, 253, 1);
+  box-shadow: 0 0 0 3px rgba(196, 181, 253, 0.3);
+}
+
+.language-selector option {
+  background: rgba(30, 30, 46, 0.95);
+  color: #ffffff;
+  padding: 8px;
+}
+
+/* Improved Dropdown/Select Styles */
+select.form-input,
+.form-input[type="select"] {
+  background: rgba(30, 30, 46, 0.85) !important;
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(196, 181, 253, 0.6) !important;
+  color: #ffffff !important;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  font-weight: 500;
+}
+
+select.form-input:hover,
+.form-input[type="select"]:hover {
+  background-color: rgba(30, 30, 46, 0.95) !important;
+  border-color: rgba(196, 181, 253, 0.8) !important;
+}
+
+select.form-input:focus,
+.form-input[type="select"]:focus {
+  background-color: rgba(30, 30, 46, 0.95) !important;
+  border-color: rgba(196, 181, 253, 1) !important;
+  box-shadow: 0 0 0 3px rgba(196, 181, 253, 0.3);
+}
+
+select.form-input option,
+.form-input[type="select"] option {
+  background: rgba(30, 30, 46, 0.98) !important;
+  color: #ffffff !important;
+  padding: 12px !important;
+  border: none;
+  font-weight: 500;
+}
+
+select.form-input option:hover,
+select.form-input option:checked,
+select.form-input option:focus,
+.form-input[type="select"] option:hover,
+.form-input[type="select"] option:checked,
+.form-input[type="select"] option:focus {
+  background: rgba(139, 92, 246, 0.6) !important;
+  color: #ffffff !important;
+}
+
+/* Spinning icon animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinning-icon {
+  animation: spin 1s linear infinite;
+}
+
+/* Icon size utilities (replacing Tailwind classes) */
+.icon-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+.icon-md {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.icon-lg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.icon-inline {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.icon-mr-1 {
+  margin-right: 0.25rem;
+}
+
+.icon-mr-2 {
+  margin-right: 0.5rem;
 }

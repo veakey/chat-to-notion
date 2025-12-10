@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { LightBulbIcon, PaperAirplaneIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import { useToast } from '../contexts/ToastContext';
 import { useChatForm } from '../hooks/useChatForm';
 import { useDynamicFields } from '../hooks/useDynamicFields';
@@ -153,13 +154,25 @@ function ChatPage({ isConfigured }) {
           type="submit"
           className="btn btn-primary btn-full"
           disabled={loading || !isConfigured}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
         >
-          {loading ? t('chat.form.submitLoading') : t('chat.form.submit')}
+          {loading ? (
+            <>
+              <ArrowPathIcon className="icon-md spinning-icon" />
+              {t('chat.form.submitLoading')}
+            </>
+          ) : (
+            <>
+              <PaperAirplaneIcon className="icon-md" />
+              {t('chat.form.submit')}
+            </>
+          )}
         </button>
       </form>
 
       <div style={{ marginTop: '30px', padding: '15px', background: 'rgba(139, 92, 246, 0.2)', borderRadius: '10px', border: '1px solid rgba(196, 181, 253, 0.3)' }}>
-        <h3 style={{ color: '#ffffff', fontSize: '1rem', marginBottom: '10px' }}>
+        <h3 style={{ color: '#ffffff', fontSize: '1rem', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <LightBulbIcon className="icon-md" />
           {t('chat.tips.title')}
         </h3>
         <ul style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.875rem', paddingLeft: '20px' }}>
