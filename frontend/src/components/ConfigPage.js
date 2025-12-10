@@ -8,6 +8,7 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
   const [apiKey, setApiKey] = useState('');
   const [databaseId, setDatabaseId] = useState('');
   const [loading, setLoading] = useState(false);
+  const [detectedProperties, setDetectedProperties] = useState(null);
   const { success, error } = useToast();
 
   const handleSubmit = async (e) => {
@@ -38,7 +39,7 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
   return (
     <div className="glass-card">
       <h2 style={{ color: '#ffffff', marginBottom: '20px' }}>
-        Notion Configuration
+        Configuration Notion
       </h2>
 
       <div style={{ marginBottom: '20px' }}>
@@ -47,14 +48,14 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
             isConfigured ? 'status-configured' : 'status-not-configured'
           }`}
         >
-          {isConfigured ? '✓ Configured' : '✗ Not Configured'}
+          {isConfigured ? '✓ Configuré' : '✗ Non configuré'}
         </span>
       </div>
 
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label className="form-label">Notion API Key</label>
+          <label className="form-label">Code secret de l'intégration interne</label>
           <input
             type="password"
             className="form-input"
@@ -64,20 +65,21 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
             required
           />
           <p style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.875rem', marginTop: '5px' }}>
-            Get your API key from{' '}
+            Copiez le code secret depuis votre{' '}
             <a
               href="https://www.notion.so/my-integrations"
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: '#c4b5fd' }}
             >
-              Notion Integrations
+              intégration Notion
             </a>
+            {' '}(bouton "Afficher" ou "Actualiser")
           </p>
         </div>
 
         <div className="form-group">
-          <label className="form-label">Database ID</label>
+          <label className="form-label">ID de la base de données</label>
           <input
             type="text"
             className="form-input"
@@ -87,7 +89,7 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
             required
           />
           <p style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.875rem', marginTop: '5px' }}>
-            The database must have "Name" (title) and "Date" (date) properties
+            La base de données doit avoir les propriétés "Name" (titre) et "Date" (date)
           </p>
         </div>
 
@@ -96,17 +98,17 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
           className="btn btn-primary btn-full"
           disabled={loading}
         >
-          {loading ? 'Saving...' : 'Save Configuration'}
+          {loading ? 'Enregistrement...' : 'Enregistrer la configuration'}
         </button>
       </form>
 
       <div style={{ marginTop: '30px', padding: '15px', background: 'rgba(139, 92, 246, 0.2)', borderRadius: '10px', border: '1px solid rgba(196, 181, 253, 0.3)' }}>
         <h3 style={{ color: '#ffffff', fontSize: '1rem', marginBottom: '10px' }}>
-          📖 Setup Instructions
+          📖 Instructions de configuration
         </h3>
         <ol style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.875rem', paddingLeft: '20px' }}>
           <li style={{ marginBottom: '8px' }}>
-            Create a new integration at{' '}
+            Créez une nouvelle intégration sur{' '}
             <a
               href="https://www.notion.so/my-integrations"
               target="_blank"
@@ -117,19 +119,23 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
             </a>
           </li>
           <li style={{ marginBottom: '8px' }}>
-            Copy the "Internal Integration Token" (API Key)
+            Copiez le <strong>"Code secret de l'intégration interne"</strong> (cliquez sur "Afficher" pour le voir)
           </li>
           <li style={{ marginBottom: '8px' }}>
-            Create or open a database in Notion
+            Créez ou ouvrez une base de données dans Notion
           </li>
           <li style={{ marginBottom: '8px' }}>
-            Ensure your database has "Name" (title) and "Date" (date) properties
+            Assurez-vous que votre base de données a les propriétés "Name" (titre) et "Date" (date)
           </li>
           <li style={{ marginBottom: '8px' }}>
-            Share the database with your integration (click "..." → "Add connections")
+            Partagez la base de données avec votre intégration (cliquez sur "..." → "Ajouter des connexions")
           </li>
           <li style={{ marginBottom: '8px' }}>
-            Copy the database ID from the URL: notion.so/[workspace]/[database_id]?v=...
+            Copiez l'ID de la base de données depuis l'URL : notion.so/[workspace]/[database_id]?v=...
+            <br />
+            <small style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+              L'ID est la partie entre le dernier "/" et le "?" dans l'URL
+            </small>
           </li>
         </ol>
       </div>

@@ -14,7 +14,7 @@ function ChatPage({ isConfigured }) {
     e.preventDefault();
 
     if (!isConfigured) {
-      error('Please configure Notion API credentials first in the Configuration tab');
+      error('Veuillez d\'abord configurer les identifiants Notion dans l\'onglet Configuration');
       return;
     }
 
@@ -32,7 +32,7 @@ function ChatPage({ isConfigured }) {
       setContent('');
       setDate(new Date().toISOString().split('T')[0]);
     } catch (err) {
-      error(err.response?.data?.error || 'Failed to send chat to Notion');
+      error(err.response?.data?.error || 'Échec de l\'envoi du chat vers Notion');
     } finally {
       setLoading(false);
     }
@@ -41,18 +41,18 @@ function ChatPage({ isConfigured }) {
   return (
     <div className="glass-card">
       <h2 style={{ color: '#ffffff', marginBottom: '20px' }}>
-        Send Chat to Notion
+        Envoyer un chat vers Notion
       </h2>
 
       {!isConfigured && (
         <div className="message message-info">
-          ⚠️ Please configure your Notion API credentials in the Configuration tab first
+          ⚠️ Veuillez d'abord configurer vos identifiants Notion dans l'onglet Configuration
         </div>
       )}
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label className="form-label">Chat Date</label>
+          <label className="form-label">Date du chat</label>
           <input
             type="date"
             className="form-input"
@@ -63,10 +63,10 @@ function ChatPage({ isConfigured }) {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Chat Content</label>
+          <label className="form-label">Contenu du chat</label>
           <textarea
             className="form-textarea"
-            placeholder={`Paste your chat conversation here...\n\nExample:\nUser: What is React?\nAssistant: React is a JavaScript library for building user interfaces...`}
+            placeholder={`Collez votre conversation de chat ici...\n\nExemple :\nUtilisateur : Qu'est-ce que React ?\nAssistant : React est une bibliothèque JavaScript pour créer des interfaces utilisateur...`}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
@@ -78,26 +78,26 @@ function ChatPage({ isConfigured }) {
           className="btn btn-primary btn-full"
           disabled={loading || !isConfigured}
         >
-          {loading ? 'Sending...' : 'Send to Notion'}
+          {loading ? 'Envoi...' : 'Envoyer vers Notion'}
         </button>
       </form>
 
       <div style={{ marginTop: '30px', padding: '15px', background: 'rgba(139, 92, 246, 0.2)', borderRadius: '10px', border: '1px solid rgba(196, 181, 253, 0.3)' }}>
         <h3 style={{ color: '#ffffff', fontSize: '1rem', marginBottom: '10px' }}>
-          💡 Tips
+          💡 Conseils
         </h3>
         <ul style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '0.875rem', paddingLeft: '20px' }}>
           <li style={{ marginBottom: '8px' }}>
-            You can paste entire chat conversations from ChatGPT or other platforms
+            Vous pouvez coller des conversations complètes depuis ChatGPT ou d'autres plateformes
           </li>
           <li style={{ marginBottom: '8px' }}>
-            The first line will be used as the title in Notion
+            La première ligne sera utilisée comme titre dans Notion
           </li>
           <li style={{ marginBottom: '8px' }}>
-            Select a date to organize your chats chronologically
+            Sélectionnez une date pour organiser vos chats chronologiquement
           </li>
           <li style={{ marginBottom: '8px' }}>
-            The chat will be saved as a new page in your configured Notion database
+            Le chat sera enregistré comme une nouvelle page dans votre base de données Notion configurée
           </li>
         </ul>
       </div>
