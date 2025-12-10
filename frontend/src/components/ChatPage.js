@@ -43,9 +43,21 @@ function ChatPage({ isConfigured }) {
       
       const allProperties = propertiesResponse.data.properties || [];
       const selected = configResponse.data.additionalProperties || {};
+      const savedDynamicFields = configResponse.data.dynamicFields || [];
       
       setAvailableProperties(allProperties);
       setSelectedProperties(selected);
+      
+      // Charger les champs dynamiques sauvegardés
+      if (savedDynamicFields.length > 0) {
+        const loadedFields = savedDynamicFields.map((field, index) => ({
+          id: field.id || Date.now() + index,
+          name: field.name || '',
+          type: field.type || 'rich_text',
+          value: field.value || ''
+        }));
+        setDynamicFields(loadedFields);
+      }
       
       // Initialiser les valeurs des propriétés sélectionnées
       const initialValues = {};
@@ -65,26 +77,57 @@ function ChatPage({ isConfigured }) {
       error('Maximum 10 champs dynamiques autorisés');
       return;
     }
-    setDynamicFields([...dynamicFields, { id: Date.now(), name: '', type: 'rich_text', value: '' }]);
+    const newField = { id: Date.now(), name: '', type: 'rich_text', value: '' };
+    const updatedFields = [...dynamicFields, newField];
+    setDynamicFields(updatedFields);
+    // Sauvegarder après ajout
+    saveDynamicFields(updatedFields);
   };
 
   const removeDynamicField = (id) => {
-    setDynamicFields(dynamicFields.filter(field => field.id !== id));
-    // Retirer aussi de missingProperties si présent
     const field = dynamicFields.find(f => f.id === id);
+    const updatedFields = dynamicFields.filter(f => f.id !== id);
+    setDynamicFields(updatedFields);
+    
+    // Retirer aussi de missingProperties si présent
     if (field) {
       setMissingProperties(missingProperties.filter(name => name !== field.name));
     }
+    
+    // Sauvegarder après suppression
+    saveDynamicFields(updatedFields);
   };
 
   const updateDynamicField = (id, field, value) => {
-    setDynamicFields(dynamicFields.map(f => f.id === id ? { ...f, [field]: value } : f));
+    const updatedFields = dynamicFields.map(f => f.id === id ? { ...f, [field]: value } : f);
+    setDynamicFields(updatedFields);
+    
     // Si le nom change, mettre à jour missingProperties
     if (field === 'name') {
       const oldField = dynamicFields.find(f => f.id === id);
       if (oldField) {
         setMissingProperties(missingProperties.filter(name => name !== oldField.name));
       }
+    }
+    
+    // Sauvegarder automatiquement les champs dynamiques
+    saveDynamicFields(updatedFields);
+  };
+
+  const saveDynamicFields = async (fieldsToSave = null) => {
+    const fields = fieldsToSave || dynamicFields;
+    // Sauvegarder seulement la structure (nom et type), pas les valeurs
+    const fieldsToSaveStructure = fields.map(f => ({
+      id: f.id,
+      name: f.name,
+      type: f.type
+    }));
+    try {
+      await axios.post(`${API_BASE_URL}/api/config/dynamic-fields`, {
+        dynamicFields: fieldsToSaveStructure
+      });
+    } catch (err) {
+      console.error('Erreur lors de la sauvegarde des champs dynamiques:', err);
     }
   };
 
@@ -179,7 +222,7 @@ function ChatPage({ isConfigured }) {
 
       setProgress(100);
 
-      // Clear form
+      // Clear form (mais garder les champs dynamiques)
       setTimeout(() => {
         setContent('');
         setDate(new Date().toISOString().split('T')[0]);
@@ -188,7 +231,8 @@ function ChatPage({ isConfigured }) {
           resetValues[propName] = '';
         });
         setPropertyValues(resetValues);
-        setDynamicFields([]);
+        // Réinitialiser seulement les valeurs des champs dynamiques, pas les champs eux-mêmes
+        setDynamicFields(dynamicFields.map(f => ({ ...f, value: '' })));
         setProgress(0);
       }, 1000);
     } catch (err) {

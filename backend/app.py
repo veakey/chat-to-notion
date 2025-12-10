@@ -53,7 +53,7 @@ def save_config_endpoint():
             # La propriété date est optionnelle, on ne retourne pas d'erreur si elle n'existe pas
             
             # Sauvegarder dans SQLite avec les propriétés détectées
-            save_config(api_key, database_id, title_property, date_property, None)
+            save_config(api_key, database_id, title_property, date_property, None, None)
             
             return jsonify({
                 "message": "Configuration enregistrée avec succès",
@@ -76,7 +76,8 @@ def get_config_endpoint():
         "databaseId": config.get('database_id', '') if config else '',
         "titleProperty": config.get('title_property', '') if config else '',
         "dateProperty": config.get('date_property', '') if config else '',
-        "additionalProperties": config.get('additional_properties', {}) if config else {}
+        "additionalProperties": config.get('additional_properties', {}) if config else {},
+        "dynamicFields": config.get('dynamic_fields', []) if config else []
     }), 200
 
 @app.route('/api/config/properties', methods=['GET'])
@@ -122,10 +123,36 @@ def save_additional_properties():
             config['database_id'],
             config.get('title_property'),
             config.get('date_property'),
-            additional_properties
+            additional_properties,
+            config.get('dynamic_fields')
         )
         
         return jsonify({"message": "Propriétés supplémentaires enregistrées avec succès"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/config/dynamic-fields', methods=['POST'])
+def save_dynamic_fields():
+    """Sauvegarde les champs dynamiques pour la base de données actuelle"""
+    try:
+        config = get_config()
+        if not config:
+            return jsonify({"error": "Notion n'est pas configuré. Veuillez configurer les identifiants d'abord."}), 400
+        
+        data = request.json
+        dynamic_fields = data.get('dynamicFields', [])
+        
+        # Sauvegarder les champs dynamiques
+        save_config(
+            config['api_key'],
+            config['database_id'],
+            config.get('title_property'),
+            config.get('date_property'),
+            config.get('additional_properties'),
+            dynamic_fields
+        )
+        
+        return jsonify({"message": "Champs dynamiques enregistrés avec succès"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -216,7 +243,7 @@ def process_chat():
                 
                 # Mettre à jour la configuration avec les propriétés détectées
                 if title_property:
-                    save_config(config['api_key'], config['database_id'], title_property, date_property, config.get('additional_properties'))
+                    save_config(config['api_key'], config['database_id'], title_property, date_property, config.get('additional_properties'), config.get('dynamic_fields'))
                 else:
                     return jsonify({"error": "Aucune propriété de type 'title' trouvée dans la base de données. Veuillez créer une propriété de type titre."}), 400
             except Exception as e:
@@ -253,7 +280,7 @@ def process_chat():
                         }
                     }
                     # Sauvegarder la propriété date trouvée
-                    save_config(config['api_key'], config['database_id'], title_property, date_property, config.get('additional_properties'))
+                    save_config(config['api_key'], config['database_id'], title_property, date_property, config.get('additional_properties'), config.get('dynamic_fields'))
                     break
         
         # Ajouter les propriétés supplémentaires et valider leur existence

@@ -35,6 +35,10 @@ def init_db():
             cursor.execute('ALTER TABLE notion_config ADD COLUMN additional_properties TEXT')
         except sqlite3.OperationalError:
             pass  # La colonne existe déjà
+        try:
+            cursor.execute('ALTER TABLE notion_config ADD COLUMN dynamic_fields TEXT')
+        except sqlite3.OperationalError:
+            pass  # La colonne existe déjà
         conn.commit()
 
 @contextmanager
@@ -47,7 +51,7 @@ def get_db_connection():
     finally:
         conn.close()
 
-def save_config(api_key, database_id, title_property=None, date_property=None, additional_properties=None):
+def save_config(api_key, database_id, title_property=None, date_property=None, additional_properties=None, dynamic_fields=None):
     """Sauvegarde ou met à jour la configuration Notion"""
     with get_db_connection() as conn:
         cursor = conn.cursor()
@@ -57,23 +61,36 @@ def save_config(api_key, database_id, title_property=None, date_property=None, a
         if additional_properties:
             additional_properties_json = json.dumps(additional_properties)
         
-        # Vérifier si une configuration existe déjà
-        cursor.execute('SELECT id FROM notion_config LIMIT 1')
+        # Convertir dynamic_fields en JSON si c'est une liste
+        dynamic_fields_json = None
+        if dynamic_fields:
+            dynamic_fields_json = json.dumps(dynamic_fields)
+        
+        # Vérifier si une configuration existe déjà pour cette database_id
+        cursor.execute('SELECT id, dynamic_fields, additional_properties FROM notion_config WHERE database_id = ? LIMIT 1', (database_id,))
         existing = cursor.fetchone()
         
         if existing:
+            # Si dynamic_fields n'est pas fourni, conserver la valeur existante
+            if dynamic_fields_json is None and existing['dynamic_fields']:
+                dynamic_fields_json = existing['dynamic_fields']
+            
+            # Si additional_properties n'est pas fourni, conserver la valeur existante
+            if additional_properties_json is None and existing['additional_properties']:
+                additional_properties_json = existing['additional_properties']
+            
             # Mettre à jour la configuration existante
             cursor.execute('''
                 UPDATE notion_config 
-                SET api_key = ?, database_id = ?, title_property = ?, date_property = ?, additional_properties = ?, updated_at = CURRENT_TIMESTAMP
+                SET api_key = ?, database_id = ?, title_property = ?, date_property = ?, additional_properties = ?, dynamic_fields = ?, updated_at = CURRENT_TIMESTAMP
                 WHERE id = ?
-            ''', (api_key, database_id, title_property, date_property, additional_properties_json, existing['id']))
+            ''', (api_key, database_id, title_property, date_property, additional_properties_json, dynamic_fields_json, existing['id']))
         else:
             # Créer une nouvelle configuration
             cursor.execute('''
-                INSERT INTO notion_config (api_key, database_id, title_property, date_property, additional_properties)
-                VALUES (?, ?, ?, ?, ?)
-            ''', (api_key, database_id, title_property, date_property, additional_properties_json))
+                INSERT INTO notion_config (api_key, database_id, title_property, date_property, additional_properties, dynamic_fields)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ''', (api_key, database_id, title_property, date_property, additional_properties_json, dynamic_fields_json))
         
         conn.commit()
 
@@ -81,7 +98,7 @@ def get_config():
     """Récupère la configuration Notion"""
     with get_db_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT api_key, database_id, title_property, date_property, additional_properties FROM notion_config LIMIT 1')
+        cursor.execute('SELECT api_key, database_id, title_property, date_property, additional_properties, dynamic_fields FROM notion_config LIMIT 1')
         row = cursor.fetchone()
         
         if row:
@@ -92,12 +109,20 @@ def get_config():
                 except json.JSONDecodeError:
                     additional_properties = {}
             
+            dynamic_fields = None
+            if row['dynamic_fields']:
+                try:
+                    dynamic_fields = json.loads(row['dynamic_fields'])
+                except json.JSONDecodeError:
+                    dynamic_fields = []
+            
             return {
                 'api_key': row['api_key'],
                 'database_id': row['database_id'],
                 'title_property': row['title_property'],
                 'date_property': row['date_property'],
-                'additional_properties': additional_properties or {}
+                'additional_properties': additional_properties or {},
+                'dynamic_fields': dynamic_fields or []
             }
         return None
 
