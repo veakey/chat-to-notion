@@ -114,6 +114,32 @@ chat-to-notion/
 - `GET /api/config` - Get configuration status
 - `POST /api/chat` - Send chat to Notion
 
+## Production Deployment Notes
+
+⚠️ **Important Security Considerations:**
+
+### Backend
+- Disable Flask debug mode (`debug=False`)
+- Use a production WSGI server (Gunicorn, uWSGI)
+- Store API keys in environment variables or secrets manager
+- Implement proper authentication and authorization
+- Use HTTPS for all connections
+- Add rate limiting to prevent abuse
+- Implement proper logging and monitoring
+
+### Frontend
+- Replace URL shortener with direct image URL or local image
+- Build for production (`npm run build`)
+- Serve static files through a web server (nginx, Apache)
+- Configure proper CORS policies
+- Add input validation and sanitization
+
+### Database
+- Replace in-memory storage with a proper database
+- Encrypt sensitive data at rest
+- Implement backup strategies
+- Use connection pooling
+
 ## License
 
 See LICENSE file for details.
