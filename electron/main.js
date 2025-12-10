@@ -131,11 +131,17 @@ function stopBackend() {
 }
 
 function createWindow() {
+  // Determine preload path
+  const preloadPath = path.join(__dirname, 'preload.js');
+  console.log('Preload path:', preloadPath);
+  console.log('Preload exists:', fs.existsSync(preloadPath));
+
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
+    show: false, // Don't show until ready
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: preloadPath,
       nodeIntegration: false,
       contextIsolation: true,
       enableRemoteModule: false
@@ -146,12 +152,64 @@ function createWindow() {
   // Load the app
   if (isDev) {
     // In development, load from the React dev server
+    console.log('Loading from React dev server...');
     mainWindow.loadURL('http://localhost:3000');
     mainWindow.webContents.openDevTools();
   } else {
     // In production, load the built React app
-    mainWindow.loadFile(path.join(__dirname, '..', 'frontend', 'build', 'index.html'));
+    // In packaged app, files are in resources/app or resources/app.asar
+    const indexPath = path.join(__dirname, '..', 'frontend', 'build', 'index.html');
+    console.log('Loading production build from:', indexPath);
+    console.log('__dirname:', __dirname);
+    console.log('File exists:', fs.existsSync(indexPath));
+    
+    // List directory contents for debugging
+    const buildDir = path.join(__dirname, '..', 'frontend', 'build');
+    if (fs.existsSync(buildDir)) {
+      console.log('Build directory contents:', fs.readdirSync(buildDir));
+    } else {
+      console.log('Build directory does not exist:', buildDir);
+    }
+    
+    mainWindow.loadFile(indexPath).catch((error) => {
+      console.error('Failed to load index.html:', error);
+      // Try alternative paths
+      const altPaths = [
+        path.join(process.resourcesPath, 'app', 'frontend', 'build', 'index.html'),
+        path.join(app.getAppPath(), 'frontend', 'build', 'index.html'),
+        path.join(__dirname, 'frontend', 'build', 'index.html')
+      ];
+      
+      let triedAlt = false;
+      for (const altPath of altPaths) {
+        console.log('Trying alternative path:', altPath);
+        if (fs.existsSync(altPath)) {
+          mainWindow.loadFile(altPath).catch((altError) => {
+            console.error('Failed to load from alternative path:', altPath, altError);
+          });
+          triedAlt = true;
+          break;
+        }
+      }
+      
+      if (!triedAlt) {
+        console.error('All paths failed. Showing error page.');
+        mainWindow.loadURL('data:text/html,<h1>Error: Failed to load application</h1><p>Please check the console for details.</p>');
+      }
+    });
   }
+
+  // Show window when ready
+  mainWindow.once('ready-to-show', () => {
+    console.log('Window ready to show');
+    mainWindow.show();
+    mainWindow.focus();
+  });
+
+  // Log any loading errors
+  mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+    console.error('Failed to load:', errorCode, errorDescription, validatedURL);
+  });
 
   mainWindow.on('closed', () => {
     mainWindow = null;
@@ -165,13 +223,17 @@ ipcMain.handle('get-user-data-path', () => {
 
 // App lifecycle
 app.on('ready', async () => {
-  try {
-    await startBackend();
-    createWindow();
-  } catch (error) {
-    console.error('Failed to start application:', error);
-    app.quit();
-  }
+  // Create window first so user sees something
+  createWindow();
+  
+  // Start backend in background
+  startBackend().catch((error) => {
+    console.error('Failed to start backend:', error);
+    // Show error to user but don't quit - they can still see the UI
+    if (mainWindow) {
+      mainWindow.webContents.send('backend-error', error.message);
+    }
+  });
 });
 
 app.on('window-all-closed', () => {

@@ -14,7 +14,9 @@ REM Create backend-dist directory if it doesn't exist
 if not exist backend-dist mkdir backend-dist
 
 REM Build the backend
-pyinstaller backend.spec --distpath backend-dist --clean
+REM pyinstaller backend.spec --distpath backend-dist --clean
+REM use python command to build the backend
+python -m PyInstaller backend.spec --distpath backend-dist --clean
 
 if %errorlevel% equ 0 (
     echo Backend build successful!
