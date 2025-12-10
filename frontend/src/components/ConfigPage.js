@@ -78,7 +78,7 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
               href="https://www.notion.so/my-integrations"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: '#60a5fa' }}
+              style={{ color: '#c4b5fd' }}
             >
               Notion Integrations
             </a>
@@ -109,7 +109,7 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
         </button>
       </form>
 
-      <div style={{ marginTop: '30px', padding: '15px', background: 'rgba(59, 130, 246, 0.2)', borderRadius: '10px' }}>
+      <div style={{ marginTop: '30px', padding: '15px', background: 'rgba(139, 92, 246, 0.2)', borderRadius: '10px', border: '1px solid rgba(196, 181, 253, 0.3)' }}>
         <h3 style={{ color: '#ffffff', fontSize: '1rem', marginBottom: '10px' }}>
           📖 Setup Instructions
         </h3>
@@ -120,7 +120,7 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
               href="https://www.notion.so/my-integrations"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: '#60a5fa' }}
+              style={{ color: '#c4b5fd' }}
             >
               Notion Integrations
             </a>
