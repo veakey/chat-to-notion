@@ -29,6 +29,102 @@ def detect_database_properties(notion, database_id):
     return title_property, date_property, properties
 
 
+def get_database_structure(notion, database_id):
+    """
+    Récupère la structure complète de la base de données Notion avec toutes les métadonnées
+    """
+    database = notion.databases.retrieve(database_id=database_id)
+    properties = database.get('properties', {})
+    
+    # Extraire les informations de la base de données
+    database_info = {
+        "title": _extract_title(database.get('title', [])),
+        "description": _extract_rich_text(database.get('description', [])) if database.get('description') else None
+    }
+    
+    # Extraire les propriétés avec toutes leurs métadonnées
+    properties_list = []
+    for prop_name, prop_data in properties.items():
+        prop_info = _extract_property_info(prop_name, prop_data)
+        properties_list.append(prop_info)
+    
+    return {
+        "database_info": database_info,
+        "properties": properties_list
+    }
+
+
+def _extract_title(title_array):
+    """Extrait le texte d'un titre Notion"""
+    if not title_array:
+        return ""
+    return "".join([item.get('plain_text', '') for item in title_array])
+
+
+def _extract_rich_text(rich_text_array):
+    """Extrait le texte d'un rich_text Notion"""
+    if not rich_text_array:
+        return ""
+    return "".join([item.get('plain_text', '') for item in rich_text_array])
+
+
+def _extract_property_info(prop_name, prop_data):
+    """Extrait toutes les informations d'une propriété Notion"""
+    prop_type = prop_data.get('type', '')
+    prop_id = prop_data.get('id', '')
+    
+    # Propriétés de base
+    property_info = {
+        "name": prop_name,
+        "type": prop_type,
+        "id": prop_id,
+        "required": prop_type == 'title'  # Title est toujours requis dans Notion
+    }
+    
+    # Extraire les options et contraintes selon le type
+    if prop_type == 'select':
+        options = prop_data.get('select', {}).get('options', [])
+        property_info["options"] = [opt.get('name', '') for opt in options]
+        property_info["has_options"] = len(options) > 0
+    elif prop_type == 'multi_select':
+        options = prop_data.get('multi_select', {}).get('options', [])
+        property_info["options"] = [opt.get('name', '') for opt in options]
+        property_info["has_options"] = len(options) > 0
+    elif prop_type == 'number':
+        number_config = prop_data.get('number', {})
+        if number_config.get('format'):
+            property_info["format"] = number_config.get('format')
+    elif prop_type == 'date':
+        date_config = prop_data.get('date', {})
+        property_info["has_time"] = date_config.get('time_zone') is not None
+    elif prop_type == 'rich_text':
+        rich_text_config = prop_data.get('rich_text', {})
+        # Pas de contraintes spécifiques pour rich_text
+    elif prop_type == 'checkbox':
+        # Pas de contraintes pour checkbox
+        pass
+    elif prop_type == 'url':
+        # Pas de contraintes pour url
+        pass
+    elif prop_type == 'email':
+        # Pas de contraintes pour email
+        pass
+    elif prop_type == 'phone_number':
+        # Pas de contraintes pour phone_number
+        pass
+    elif prop_type == 'relation':
+        relation_config = prop_data.get('relation', {})
+        property_info["database_id"] = relation_config.get('database_id')
+        property_info["is_single_property"] = relation_config.get('single_property', False)
+    elif prop_type == 'rollup':
+        rollup_config = prop_data.get('rollup', {})
+        property_info["rollup_property"] = rollup_config.get('rollup_property_name')
+        property_info["relation_property"] = rollup_config.get('relation_property_name')
+        property_info["function"] = rollup_config.get('function')
+    
+    return property_info
+
+
 def build_notion_properties(config, parsed_data, additional_property_values, db_properties):
     """Construit les propriétés Notion pour la création de page"""
     title_property = config.get('title_property')
