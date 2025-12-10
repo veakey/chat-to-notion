@@ -1,27 +1,25 @@
-name: Build Desktop App
+name: Build and Release Desktop App
 
 on:
   push:
     branches:
       - main
-      - develop
     tags:
-      - 'v*'
+      - 'v*.*.*'
   pull_request:
     branches:
       - main
-      - develop
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-windows:
     runs-on: windows-latest
     
     permissions:
-      contents: read
+      contents: write
       actions: read
     
     steps:
@@ -73,7 +71,7 @@ jobs:
     runs-on: macos-latest
     
     permissions:
-      contents: read
+      contents: write
       actions: read
     
     steps:
@@ -127,7 +125,7 @@ jobs:
     runs-on: ubuntu-latest
     
     permissions:
-      contents: read
+      contents: write
       actions: read
     
     steps:
@@ -186,3 +184,71 @@ jobs:
           name: chat-to-notion-linux-deb
           path: dist/*.deb
           retention-days: 30
+
+  create-release:
+    needs: [build-windows, build-macos, build-linux]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: chat-to-notion-windows
+          path: release-assets/
+      
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: chat-to-notion-macos
+          path: release-assets/
+      
+      - name: Download Linux AppImage artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: chat-to-notion-linux-appimage
+          path: release-assets/
+      
+      - name: Download Linux deb artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: chat-to-notion-linux-deb
+          path: release-assets/
+      
+      - name: Generate release tag
+        id: tag
+        run: |
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          TAG="build-${TIMESTAMP}"
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "Generated tag: ${TAG}"
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: "Desktop App Build - ${{ steps.tag.outputs.tag }}"
+          body: |
+            Automated build of Chat to Notion desktop application
+            
+            **Build Information:**
+            - Commit: ${{ github.sha }}
+            - Branch: ${{ github.ref_name }}
+            - Triggered by: ${{ github.actor }}
+            
+            **Downloads:**
+            - Windows: `*.exe` - NSIS installer
+            - macOS: `*.dmg` - Disk image
+            - Linux: `*.AppImage` - Universal package, or `*.deb` - Debian package
+          files: |
+            release-assets/*
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
