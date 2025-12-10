@@ -1,27 +1,24 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useToast } from '../contexts/ToastContext';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 function ChatPage({ isConfigured }) {
   const [content, setContent] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-  const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { success, error, info } = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!isConfigured) {
-      setMessage({
-        type: 'error',
-        text: 'Please configure Notion API credentials first in the Configuration tab',
-      });
+      error('Please configure Notion API credentials first in the Configuration tab');
       return;
     }
 
     setLoading(true);
-    setMessage(null);
 
     try {
       const response = await axios.post(`${API_BASE_URL}/api/chat`, {
@@ -29,19 +26,13 @@ function ChatPage({ isConfigured }) {
         date,
       });
 
-      setMessage({
-        type: 'success',
-        text: response.data.message,
-      });
+      success(response.data.message);
 
       // Clear form
       setContent('');
       setDate(new Date().toISOString().split('T')[0]);
-    } catch (error) {
-      setMessage({
-        type: 'error',
-        text: error.response?.data?.error || 'Failed to send chat to Notion',
-      });
+    } catch (err) {
+      error(err.response?.data?.error || 'Failed to send chat to Notion');
     } finally {
       setLoading(false);
     }
@@ -57,10 +48,6 @@ function ChatPage({ isConfigured }) {
         <div className="message message-info">
           ⚠️ Please configure your Notion API credentials in the Configuration tab first
         </div>
-      )}
-
-      {message && (
-        <div className={`message message-${message.type}`}>{message.text}</div>
       )}
 
       <form onSubmit={handleSubmit}>

@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useToast } from '../contexts/ToastContext';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 function ConfigPage({ isConfigured, onConfigSaved }) {
   const [apiKey, setApiKey] = useState('');
   const [databaseId, setDatabaseId] = useState('');
-  const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { success, error } = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage(null);
 
     try {
       const response = await axios.post(`${API_BASE_URL}/api/config`, {
@@ -20,10 +20,7 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
         databaseId,
       });
 
-      setMessage({
-        type: 'success',
-        text: response.data.message,
-      });
+      success(response.data.message);
 
       // Clear sensitive data from state
       setApiKey('');
@@ -31,11 +28,8 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
 
       // Notify parent component
       onConfigSaved();
-    } catch (error) {
-      setMessage({
-        type: 'error',
-        text: error.response?.data?.error || 'Failed to save configuration',
-      });
+    } catch (err) {
+      error(err.response?.data?.error || 'Failed to save configuration');
     } finally {
       setLoading(false);
     }
@@ -57,9 +51,6 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
         </span>
       </div>
 
-      {message && (
-        <div className={`message message-${message.type}`}>{message.text}</div>
-      )}
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">
