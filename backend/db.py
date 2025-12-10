@@ -4,7 +4,9 @@ import json
 from contextlib import contextmanager
 
 # Chemin vers la base de données SQLite
-DB_PATH = os.path.join(os.path.dirname(__file__), 'notion_config.db')
+# Support for Electron: use DB_PATH environment variable if available
+# Otherwise, use the default path in the backend directory
+DB_PATH = os.environ.get('DB_PATH', os.path.join(os.path.dirname(__file__), 'notion_config.db'))
 
 def init_db():
     """Initialise la base de données SQLite et crée la table si elle n'existe pas"""

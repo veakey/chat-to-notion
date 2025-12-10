@@ -1,6 +1,8 @@
 # Chat to Notion
 
-A fullstack web application that allows users to paste chat conversations (from ChatGPT or other sources) and automatically send them to Notion with organized dates.
+A fullstack application that allows users to paste chat conversations (from ChatGPT or other sources) and automatically send them to Notion with organized dates.
+
+**Available as both a web application and a native desktop app!**
 
 ## Features
 
@@ -11,8 +13,27 @@ A fullstack web application that allows users to paste chat conversations (from 
 - 📊 **Notion Integration**: Automatically creates pages in your Notion database
 - 🔍 **Smart Parsing**: Extracts titles and content from chat conversations
 - 🌍 **Internationalization (i18n)**: Support for multiple languages (French, English, German, Italian)
+- 🖥️ **Desktop App**: Native desktop application for Windows, macOS, and Linux
 
-## Prerequisites
+## Installation Options
+
+### Option 1: Desktop Application (Recommended)
+
+Download the native desktop app for your platform from the [Releases](https://github.com/veakey/chat-to-notion/releases) page:
+
+- **Windows**: Download and run the `.exe` installer
+- **macOS**: Download and open the `.dmg` file
+- **Linux**: Download the `.AppImage` or `.deb` package
+
+The desktop app provides a native experience with automatic backend management - no manual setup required!
+
+For more information about the desktop app, see [ELECTRON.md](ELECTRON.md).
+
+### Option 2: Web Application (Development)
+
+Run the application in development mode with separate backend and frontend servers.
+
+## Prerequisites (Web Application)
 
 Before you begin, ensure you have the following installed:
 
@@ -20,7 +41,7 @@ Before you begin, ensure you have the following installed:
 - **Node.js 16+** and npm (check with `node --version` and `npm --version`)
 - A **Notion account** with access to create integrations and databases
 
-## Quick Start
+## Quick Start (Web Application)
 
 ### 1. Clone the Repository
 
