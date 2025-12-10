@@ -1,0 +1,76 @@
+import sqlite3
+import os
+from contextlib import contextmanager
+
+# Chemin vers la base de données SQLite
+DB_PATH = os.path.join(os.path.dirname(__file__), 'notion_config.db')
+
+def init_db():
+    """Initialise la base de données SQLite et crée la table si elle n'existe pas"""
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS notion_config (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                api_key TEXT NOT NULL,
+                database_id TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        conn.commit()
+
+@contextmanager
+def get_db_connection():
+    """Context manager pour gérer les connexions à la base de données"""
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row  # Permet d'accéder aux colonnes par nom
+    try:
+        yield conn
+    finally:
+        conn.close()
+
+def save_config(api_key, database_id):
+    """Sauvegarde ou met à jour la configuration Notion"""
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        
+        # Vérifier si une configuration existe déjà
+        cursor.execute('SELECT id FROM notion_config LIMIT 1')
+        existing = cursor.fetchone()
+        
+        if existing:
+            # Mettre à jour la configuration existante
+            cursor.execute('''
+                UPDATE notion_config 
+                SET api_key = ?, database_id = ?, updated_at = CURRENT_TIMESTAMP
+                WHERE id = ?
+            ''', (api_key, database_id, existing['id']))
+        else:
+            # Créer une nouvelle configuration
+            cursor.execute('''
+                INSERT INTO notion_config (api_key, database_id)
+                VALUES (?, ?)
+            ''', (api_key, database_id))
+        
+        conn.commit()
+
+def get_config():
+    """Récupère la configuration Notion"""
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT api_key, database_id FROM notion_config LIMIT 1')
+        row = cursor.fetchone()
+        
+        if row:
+            return {
+                'api_key': row['api_key'],
+                'database_id': row['database_id']
+            }
+        return None
+
+def has_config():
+    """Vérifie si une configuration existe"""
+    config = get_config()
+    return config is not None
+
