@@ -117,7 +117,8 @@ cd ..
 **PyInstaller Configuration** (`backend.spec`):
 - Creates a single-file executable
 - Includes all Python dependencies
-- Configured for console output (can be changed)
+- Console window is hidden for cleaner user experience
+- For debugging, use `backend-debug.spec` which shows console output
 
 ### Electron Build
 
@@ -281,6 +282,15 @@ pip install -r requirements.txt
 **"Permission denied" (Linux/macOS)**:
 ```bash
 chmod +x build-backend.sh
+```
+
+**Debug backend build issues**:
+```bash
+# Use debug spec to see console output
+pyinstaller backend-debug.spec --distpath backend-dist --clean
+# Then test the backend directly
+./backend-dist/backend  # Linux/macOS
+backend-dist\backend.exe  # Windows
 ```
 
 ### Electron Build Fails
