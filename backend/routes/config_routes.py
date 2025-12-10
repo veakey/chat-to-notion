@@ -4,7 +4,8 @@ Routes pour la configuration Notion
 from flask import Blueprint, request, jsonify
 from notion_client import Client
 from db import save_config, get_config
-from services.notion_service import detect_database_properties
+from services.notion_service import detect_database_properties, get_database_structure
+from services.property_validator import validate_properties_batch
 
 config_bp = Blueprint('config', __name__)
 
@@ -63,9 +64,9 @@ def get_config_endpoint():
     }), 200
 
 
-@config_bp.route('/api/config/properties', methods=['GET'])
-def get_database_properties():
-    """Récupère toutes les propriétés disponibles dans la base de données Notion"""
+@config_bp.route('/api/config/database-structure', methods=['GET'])
+def get_database_structure_endpoint():
+    """Récupère la structure complète de la base de données Notion avec toutes les métadonnées"""
     try:
         config = get_config()
         if not config:
@@ -74,18 +75,31 @@ def get_database_properties():
             }), 400
         
         notion = Client(auth=config['api_key'])
-        database = notion.databases.retrieve(database_id=config['database_id'])
+        structure = get_database_structure(notion, config['database_id'])
         
+        return jsonify(structure), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@config_bp.route('/api/config/properties', methods=['GET'])
+def get_database_properties():
+    """Récupère toutes les propriétés disponibles dans la base de données Notion avec métadonnées détaillées"""
+    try:
+        config = get_config()
+        if not config:
+            return jsonify({
+                "error": "Notion n'est pas configuré. Veuillez configurer les identifiants d'abord."
+            }), 400
+        
+        notion = Client(auth=config['api_key'])
+        structure = get_database_structure(notion, config['database_id'])
+        
+        # Filtrer pour exclure title et date (gérés séparément) et enrichir avec métadonnées
         properties = []
-        for prop_name, prop_data in database.get('properties', {}).items():
-            prop_type = prop_data.get('type', '')
-            # Exclure title et date car ils sont gérés séparément
-            if prop_type not in ['title', 'date']:
-                properties.append({
-                    "name": prop_name,
-                    "type": prop_type,
-                    "id": prop_data.get('id', '')
-                })
+        for prop in structure['properties']:
+            if prop['type'] not in ['title', 'date']:
+                properties.append(prop)
         
         return jsonify({"properties": properties}), 200
     except Exception as e:
@@ -182,6 +196,34 @@ def validate_properties():
                     "exists": False,
                     "type": prop_type
                 }
+        
+        return jsonify({"validation": validation_results}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@config_bp.route('/api/config/validate-property-values', methods=['POST'])
+def validate_property_values():
+    """Valide les valeurs des propriétés avant l'envoi"""
+    try:
+        config = get_config()
+        if not config:
+            return jsonify({
+                "error": "Notion n'est pas configuré. Veuillez configurer les identifiants d'abord."
+            }), 400
+        
+        data = request.json
+        property_values = data.get('propertyValues', {})
+        
+        # Récupérer la structure de la base de données
+        notion = Client(auth=config['api_key'])
+        structure = get_database_structure(notion, config['database_id'])
+        
+        # Valider les valeurs
+        validation_results = validate_properties_batch(
+            structure['properties'],
+            property_values
+        )
         
         return jsonify({"validation": validation_results}), 200
     except Exception as e:
