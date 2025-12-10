@@ -79,11 +79,7 @@ function ChatPage({ isConfigured }) {
           <label className="form-label">Chat Content</label>
           <textarea
             className="form-textarea"
-            placeholder="Paste your chat conversation here...
-
-Example:
-User: What is React?
-Assistant: React is a JavaScript library for building user interfaces..."
+            placeholder={`Paste your chat conversation here...\n\nExample:\nUser: What is React?\nAssistant: React is a JavaScript library for building user interfaces...`}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
