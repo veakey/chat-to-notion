@@ -121,6 +121,13 @@
   box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
 }
 
+.form-input:disabled,
+.form-textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .form-textarea {
   min-height: 200px;
   resize: vertical;

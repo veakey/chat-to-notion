@@ -129,6 +129,43 @@ def save_additional_properties():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/api/config/validate-properties', methods=['POST'])
+def validate_properties():
+    """Valide si des propriétés existent dans la base de données Notion"""
+    try:
+        config = get_config()
+        if not config:
+            return jsonify({"error": "Notion n'est pas configuré. Veuillez configurer les identifiants d'abord."}), 400
+        
+        data = request.json
+        properties_to_validate = data.get('properties', [])
+        
+        notion = Client(auth=config['api_key'])
+        database = notion.databases.retrieve(database_id=config['database_id'])
+        db_properties = database.get('properties', {})
+        
+        validation_results = {}
+        for prop in properties_to_validate:
+            prop_name = prop.get('name', '')
+            prop_type = prop.get('type', '')
+            
+            if prop_name in db_properties:
+                existing_type = db_properties[prop_name].get('type', '')
+                validation_results[prop_name] = {
+                    "exists": True,
+                    "type": existing_type,
+                    "matches": existing_type == prop_type
+                }
+            else:
+                validation_results[prop_name] = {
+                    "exists": False,
+                    "type": prop_type
+                }
+        
+        return jsonify({"validation": validation_results}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/api/chat', methods=['POST'])
 def process_chat():
     """Process and send chat data to Notion"""
@@ -205,8 +242,22 @@ def process_chat():
                     "start": parsed_data['date']
                 }
             }
+        else:
+            # Si pas de propriété date détectée, essayer de la trouver maintenant
+            for prop_name, prop_data in db_properties.items():
+                if prop_data.get('type') == 'date':
+                    date_property = prop_name
+                    properties[date_property] = {
+                        "date": {
+                            "start": parsed_data['date']
+                        }
+                    }
+                    # Sauvegarder la propriété date trouvée
+                    save_config(config['api_key'], config['database_id'], title_property, date_property, config.get('additional_properties'))
+                    break
         
-        # Ajouter les propriétés supplémentaires
+        # Ajouter les propriétés supplémentaires et valider leur existence
+        missing_properties = []
         for prop_name, prop_value in additional_property_values.items():
             if prop_value and prop_name in db_properties:
                 prop_data = db_properties[prop_name]
@@ -214,6 +265,9 @@ def process_chat():
                 formatted_property = format_notion_property(prop_type, prop_value, prop_data)
                 if formatted_property:
                     properties[prop_name] = formatted_property
+            elif prop_value:
+                # Propriété non trouvée dans la base de données
+                missing_properties.append(prop_name)
         
         # Parser le contenu et créer les blocs Notion appropriés
         all_children = parse_content_to_notion_blocks(parsed_data['content'])
@@ -246,9 +300,18 @@ def process_chat():
                     # on continue quand même car la page principale a été créée
                     print(f"Erreur lors de l'ajout des blocs supplémentaires: {str(e)}")
         
+        # Construire le message de succès
+        message = f"Chat envoyé à Notion avec succès ({len(all_children)} blocs créés)"
+        if date_property and date_property in properties:
+            message += f" - Date: {parsed_data['date']}"
+        elif not date_property:
+            message += " - ⚠️ Aucune propriété date trouvée dans votre base de données"
+        
         return jsonify({
-            "message": f"Chat envoyé à Notion avec succès ({len(all_children)} blocs créés)",
-            "notionPageId": page_id
+            "message": message,
+            "notionPageId": page_id,
+            "dateSent": date_property in properties if date_property else False,
+            "missingProperties": missing_properties
         }), 200
         
     except Exception as e:
