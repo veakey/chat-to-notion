@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import ConfigPage from './components/ConfigPage';
 import ChatPage from './components/ChatPage';
+import ToastContainer from './components/ToastContainer';
+import { ToastProvider } from './contexts/ToastContext';
 import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
@@ -32,47 +34,50 @@ function App() {
   };
 
   return (
-    <div className="app">
-      <div className="background"></div>
-      <div className="container">
-        <h1 className="app-title">Chat to Notion</h1>
-        <p className="app-subtitle">
-          Send your chat conversations to Notion with ease
-        </p>
+    <ToastProvider>
+      <div className="app">
+        <div className="background"></div>
+        <ToastContainer />
+        <div className="container">
+          <h1 className="app-title">Chat to Notion</h1>
+          <p className="app-subtitle">
+            Send your chat conversations to Notion with ease
+          </p>
 
-        {loading ? (
-          <div className="glass-card">
-            <div className="loading">Loading...</div>
-          </div>
-        ) : (
-          <>
-            <div className="tab-nav">
-              <button
-                className={`tab-button ${activeTab === 'chat' ? 'active' : ''}`}
-                onClick={() => setActiveTab('chat')}
-              >
-                📝 Send Chat
-              </button>
-              <button
-                className={`tab-button ${activeTab === 'config' ? 'active' : ''}`}
-                onClick={() => setActiveTab('config')}
-              >
-                ⚙️ Configuration
-              </button>
+          {loading ? (
+            <div className="glass-card">
+              <div className="loading">Loading...</div>
             </div>
+          ) : (
+            <>
+              <div className="tab-nav">
+                <button
+                  className={`tab-button ${activeTab === 'chat' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('chat')}
+                >
+                  📝 Send Chat
+                </button>
+                <button
+                  className={`tab-button ${activeTab === 'config' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('config')}
+                >
+                  ⚙️ Configuration
+                </button>
+              </div>
 
-            {activeTab === 'config' ? (
-              <ConfigPage
-                isConfigured={isConfigured}
-                onConfigSaved={handleConfigSaved}
-              />
-            ) : (
-              <ChatPage isConfigured={isConfigured} />
-            )}
-          </>
-        )}
+              {activeTab === 'config' ? (
+                <ConfigPage
+                  isConfigured={isConfigured}
+                  onConfigSaved={handleConfigSaved}
+                />
+              ) : (
+                <ChatPage isConfigured={isConfigured} />
+              )}
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </ToastProvider>
   );
 }
 
