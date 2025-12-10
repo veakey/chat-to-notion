@@ -115,18 +115,22 @@ Built applications are placed in the `dist` directory:
 
 The repository includes GitHub Actions workflows for automated building:
 
-#### Build Workflow (`build-desktop.yml`)
+#### Build and Release Workflow (`build-desktop.yml`)
 
-Automatically builds the desktop app for all platforms on:
-- Push to `main` or `develop` branches
-- Pull requests to `main` or `develop`
+Automatically builds the desktop app for all platforms and creates releases when:
+- Push to `main` branch - Creates an automated build release with timestamp
+- Pull requests to `main` - Builds and tests, artifacts available for 30 days
 - Manual trigger via workflow_dispatch
 
-Artifacts are uploaded for 30 days.
+**When merged to main**, the workflow will:
+1. Build installers for Windows, macOS, and Linux
+2. Create a GitHub Release with a timestamp tag (e.g., `build-20231210-120000`)
+3. Upload all installers to the release
+4. Make binaries available on the GitHub Releases page
 
-#### Release Workflow (`release-desktop.yml`)
+#### Tagged Release Workflow (`release-desktop.yml`)
 
-Automatically creates releases when you push a version tag:
+For official version releases, push a semantic version tag:
 
 ```bash
 git tag v1.0.0
@@ -135,7 +139,7 @@ git push origin v1.0.0
 
 This will:
 1. Build the app for all platforms
-2. Create a GitHub release
+2. Create a GitHub release with the version tag
 3. Attach all built installers to the release
 
 ### Manual Distribution

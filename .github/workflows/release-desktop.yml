@@ -1,4 +1,4 @@
-name: Release Desktop App
+name: Release Tagged Version
 
 on:
   push:
@@ -24,14 +24,20 @@ jobs:
     
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            platform: linux
+          - os: macos-latest
+            platform: macos
+          - os: windows-latest
+            platform: windows
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Install Linux system dependencies
-        if: runner.os == 'Linux'
+        if: matrix.platform == 'linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk-3-0 libnotify4 libnss3 libxss1 libxtst6 xdg-utils libatspi2.0-0 libdrm2 libgbm1 libxcb-dri3-0
