@@ -22,12 +22,13 @@ This guide provides step-by-step instructions for building the Chat to Notion de
 
 **Linux (Ubuntu/Debian)**:
 ```bash
-sudo apt-get install -y libgtk-3-0 libnotify4 libnss3 libxss1 libasound2
+sudo apt-get update
+sudo apt-get install -y libgtk-3-0 libnotify4 libnss3 libxss1 libxtst6 xdg-utils libatspi2.0-0 libdrm2 libgbm1 libxcb-dri3-0
 ```
 
 **Linux (Fedora/RHEL)**:
 ```bash
-sudo dnf install -y gtk3 libnotify nss libXScrnSaver alsa-lib
+sudo dnf install -y gtk3 libnotify nss libXScrnSaver alsa-lib libXtst xdg-utils at-spi2-core libdrm mesa-libgbm
 ```
 
 ## Quick Build Guide
