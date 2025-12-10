@@ -50,6 +50,54 @@ export function useChatForm(isConfigured) {
     setPropertyValues(prev => ({ ...prev, [propName]: value }));
   };
 
+  const handleAddProperty = async (propName) => {
+    const updated = { ...selectedProperties, [propName]: true };
+    setSelectedProperties(updated);
+    
+    // Ajouter la valeur initiale
+    if (!propertyValues[propName]) {
+      setPropertyValues(prev => ({ ...prev, [propName]: '' }));
+    }
+    
+    // Sauvegarder la configuration
+    try {
+      await axios.post(`${API_BASE_URL}/api/config/properties`, {
+        additionalProperties: updated
+      });
+    } catch (err) {
+      console.error('Erreur lors de la sauvegarde:', err);
+      // Revert on error
+      setSelectedProperties(selectedProperties);
+    }
+  };
+
+  const handleRemoveProperty = async (propName) => {
+    const updated = { ...selectedProperties };
+    delete updated[propName];
+    setSelectedProperties(updated);
+    
+    // Supprimer la valeur
+    const newValues = { ...propertyValues };
+    delete newValues[propName];
+    setPropertyValues(newValues);
+    
+    // Sauvegarder la configuration
+    try {
+      await axios.post(`${API_BASE_URL}/api/config/properties`, {
+        additionalProperties: updated
+      });
+    } catch (err) {
+      console.error('Erreur lors de la sauvegarde:', err);
+      // Revert on error
+      setSelectedProperties(selectedProperties);
+      setPropertyValues(propertyValues);
+    }
+  };
+
+  const refreshProperties = async () => {
+    await loadProperties();
+  };
+
   const resetForm = () => {
     setContent('');
     setDate(new Date().toISOString().split('T')[0]);
@@ -74,6 +122,10 @@ export function useChatForm(isConfigured) {
     selectedProperties,
     propertyValues,
     handlePropertyChange,
+    handleAddProperty,
+    handleRemoveProperty,
+    refreshProperties,
+    loadProperties,
     resetForm
   };
 }

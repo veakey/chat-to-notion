@@ -63,7 +63,14 @@
     },
     "propertyFields": {
       "title": "Propriétés supplémentaires",
-      "placeholder": "Saisissez une valeur pour {{name}} ({{type}})"
+      "placeholder": "Saisissez une valeur pour {{name}} ({{type}})",
+      "refresh": "Actualiser",
+      "refreshTooltip": "Recharger les propriétés depuis Notion",
+      "addFields": "Ajouter des champs",
+      "availableProperties": "Propriétés disponibles",
+      "propertyAdded": "Propriété '{{name}}' ajoutée",
+      "propertyRemoved": "Propriété '{{name}}' supprimée",
+      "removeProperty": "Supprimer cette propriété"
     },
     "tips": {
       "title": "💡 Conseils",
@@ -80,12 +87,14 @@
     "invalidCredentials": "Identifiants Notion invalides : {{error}}",
     "noTitleProperty": "Aucune propriété de type 'title' trouvée dans la base de données. Veuillez créer une propriété de type titre.",
     "notionNotConfigured": "Notion n'est pas configuré. Veuillez configurer les identifiants d'abord.",
-    "propertyDetectionError": "Erreur lors de la détection des propriétés : {{error}}"
+    "propertyDetectionError": "Erreur lors de la détection des propriétés : {{error}}",
+    "propertiesRefreshFailed": "Échec de l'actualisation des propriétés"
   },
   "success": {
     "configSaved": "Configuration enregistrée avec succès",
     "propertiesSaved": "Propriétés supplémentaires enregistrées avec succès",
     "dynamicFieldsSaved": "Champs dynamiques enregistrés avec succès",
+    "propertiesRefreshed": "Propriétés actualisées depuis Notion",
     "chatSent": "Chat envoyé à Notion avec succès ({{blocks}} blocs créés)",
     "chatSentWithDate": "Chat envoyé à Notion avec succès ({{blocks}} blocs créés) - Date: {{date}}",
     "chatSentNoDate": "Chat envoyé à Notion avec succès ({{blocks}} blocs créés) - ⚠️ Aucune propriété date trouvée dans votre base de données"

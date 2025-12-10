@@ -24,6 +24,9 @@ function ChatPage({ isConfigured }) {
     selectedProperties,
     propertyValues,
     handlePropertyChange,
+    handleAddProperty,
+    handleRemoveProperty,
+    refreshProperties,
     resetForm
   } = useChatForm(isConfigured);
 
@@ -58,7 +61,7 @@ function ChatPage({ isConfigured }) {
       return;
     }
 
-    const result = await submitChat(content, date, propertyValues, dynamicFields);
+    const result = await submitChat(content, date, propertyValues, dynamicFields, availableProperties);
 
     if (result.success) {
       success(result.message);
@@ -129,6 +132,9 @@ function ChatPage({ isConfigured }) {
           selectedProperties={selectedProperties}
           propertyValues={propertyValues}
           onPropertyChange={handlePropertyChange}
+          onAddProperty={handleAddProperty}
+          onRemoveProperty={handleRemoveProperty}
+          onRefreshProperties={refreshProperties}
           disabled={loading}
         />
 

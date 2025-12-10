@@ -63,7 +63,14 @@
     },
     "propertyFields": {
       "title": "Additional Properties",
-      "placeholder": "Enter a value for {{name}} ({{type}})"
+      "placeholder": "Enter a value for {{name}} ({{type}})",
+      "refresh": "Refresh",
+      "refreshTooltip": "Reload properties from Notion",
+      "addFields": "Add Fields",
+      "availableProperties": "Available Properties",
+      "propertyAdded": "Property '{{name}}' added",
+      "propertyRemoved": "Property '{{name}}' removed",
+      "removeProperty": "Remove this property"
     },
     "tips": {
       "title": "💡 Tips",
@@ -80,12 +87,14 @@
     "invalidCredentials": "Invalid Notion credentials: {{error}}",
     "noTitleProperty": "No 'title' type property found in the database. Please create a title type property.",
     "notionNotConfigured": "Notion is not configured. Please configure credentials first.",
-    "propertyDetectionError": "Error detecting properties: {{error}}"
+    "propertyDetectionError": "Error detecting properties: {{error}}",
+    "propertiesRefreshFailed": "Failed to refresh properties"
   },
   "success": {
     "configSaved": "Configuration saved successfully",
     "propertiesSaved": "Additional properties saved successfully",
     "dynamicFieldsSaved": "Dynamic fields saved successfully",
+    "propertiesRefreshed": "Properties refreshed from Notion",
     "chatSent": "Chat sent to Notion successfully ({{blocks}} blocks created)",
     "chatSentWithDate": "Chat sent to Notion successfully ({{blocks}} blocks created) - Date: {{date}}",
     "chatSentNoDate": "Chat sent to Notion successfully ({{blocks}} blocks created) - ⚠️ No date property found in your database"
