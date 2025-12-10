@@ -24,6 +24,7 @@ function ConfigForm({ apiKey, setApiKey, databaseId, setDatabaseId, onSubmit, lo
           <Trans
             i18nKey="config.form.apiKeyHelp"
             components={{
+              /* eslint-disable-next-line jsx-a11y/anchor-has-content */
               link: <a
                 href="https://www.notion.so/my-integrations"
                 target="_blank"
