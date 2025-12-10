@@ -28,13 +28,17 @@ function DynamicFieldsSection({
           disabled={disabled || dynamicFields.length >= 10}
           className="btn"
           style={{
-            padding: '8px 16px',
+            padding: '12px 16px',
             fontSize: '0.875rem',
             background: dynamicFields.length >= 10 ? 'rgba(139, 92, 246, 0.3)' : 'rgba(139, 92, 246, 0.5)',
             border: '1px solid rgba(196, 181, 253, 0.3)',
             borderRadius: '8px',
             color: '#ffffff',
-            cursor: dynamicFields.length >= 10 ? 'not-allowed' : 'pointer'
+            cursor: dynamicFields.length >= 10 ? 'not-allowed' : 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            minHeight: '44px'
           }}
         >
           <PlusIcon className="icon-sm" />

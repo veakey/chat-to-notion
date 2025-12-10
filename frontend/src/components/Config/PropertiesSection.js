@@ -28,21 +28,22 @@ function PropertiesSection({
   
   const getTypeIcon = (type) => {
     const iconClass = "icon-md";
+    const iconStyle = { color: '#ffffff' };
     const icons = {
-      'title': <DocumentTextIcon className={iconClass} />,
-      'rich_text': <DocumentTextIcon className={iconClass} />,
-      'number': <HashtagIcon className={iconClass} />,
-      'select': <ListBulletIcon className={iconClass} />,
-      'multi_select': <ListBulletIcon className={iconClass} />,
-      'date': <CalendarIcon className={iconClass} />,
-      'checkbox': <CheckIcon className={iconClass} />,
-      'url': <LinkIcon className={iconClass} />,
-      'email': <EnvelopeIcon className={iconClass} />,
-      'phone_number': <PhoneIcon className={iconClass} />,
-      'relation': <LinkIcon className={iconClass} />,
-      'rollup': <ChartBarIcon className={iconClass} />
+      'title': <DocumentTextIcon className={iconClass} style={iconStyle} />,
+      'rich_text': <DocumentTextIcon className={iconClass} style={iconStyle} />,
+      'number': <HashtagIcon className={iconClass} style={iconStyle} />,
+      'select': <ListBulletIcon className={iconClass} style={iconStyle} />,
+      'multi_select': <ListBulletIcon className={iconClass} style={iconStyle} />,
+      'date': <CalendarIcon className={iconClass} style={iconStyle} />,
+      'checkbox': <CheckIcon className={iconClass} style={iconStyle} />,
+      'url': <LinkIcon className={iconClass} style={iconStyle} />,
+      'email': <EnvelopeIcon className={iconClass} style={iconStyle} />,
+      'phone_number': <PhoneIcon className={iconClass} style={iconStyle} />,
+      'relation': <LinkIcon className={iconClass} style={iconStyle} />,
+      'rollup': <ChartBarIcon className={iconClass} style={iconStyle} />
     };
-    return icons[type] || <DocumentTextIcon className={iconClass} />;
+    return icons[type] || <DocumentTextIcon className={iconClass} style={iconStyle} />;
   };
   
   return (
