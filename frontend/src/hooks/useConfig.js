@@ -15,13 +15,27 @@ export function useConfig(isConfigured) {
   const [availableProperties, setAvailableProperties] = useState([]);
   const [selectedProperties, setSelectedProperties] = useState({});
   const [loadingProperties, setLoadingProperties] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
     if (isConfigured) {
-      loadProperties();
-      loadSelectedProperties();
+      loadInitialData();
+    } else {
+      setInitialLoading(false);
     }
   }, [isConfigured]);
+
+  const loadInitialData = async () => {
+    setInitialLoading(true);
+    try {
+      await Promise.all([
+        loadProperties(),
+        loadSelectedProperties()
+      ]);
+    } finally {
+      setInitialLoading(false);
+    }
+  };
 
   const loadProperties = async () => {
     setLoadingProperties(true);
@@ -106,6 +120,7 @@ export function useConfig(isConfigured) {
     availableProperties,
     selectedProperties,
     loadingProperties,
+    initialLoading,
     handlePropertyToggle,
     handleSaveProperties,
     handleSubmit

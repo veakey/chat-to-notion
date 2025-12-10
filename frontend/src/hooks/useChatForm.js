@@ -14,14 +14,18 @@ export function useChatForm(isConfigured) {
   const [availableProperties, setAvailableProperties] = useState([]);
   const [selectedProperties, setSelectedProperties] = useState({});
   const [propertyValues, setPropertyValues] = useState({});
+  const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
     if (isConfigured) {
       loadProperties();
+    } else {
+      setInitialLoading(false);
     }
   }, [isConfigured]);
 
   const loadProperties = async () => {
+    setInitialLoading(true);
     try {
       const [propertiesResponse, configResponse] = await Promise.all([
         axios.get(`${API_BASE_URL}/api/config/properties`),
@@ -43,6 +47,8 @@ export function useChatForm(isConfigured) {
       setPropertyValues(initialValues);
     } catch (err) {
       console.error('Erreur lors du chargement des propriétés:', err);
+    } finally {
+      setInitialLoading(false);
     }
   };
 
@@ -121,6 +127,7 @@ export function useChatForm(isConfigured) {
     availableProperties,
     selectedProperties,
     propertyValues,
+    initialLoading,
     handlePropertyChange,
     handleAddProperty,
     handleRemoveProperty,

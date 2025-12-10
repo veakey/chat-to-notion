@@ -6,6 +6,7 @@ import ConfigPage from './components/ConfigPage';
 import ChatPage from './components/ChatPage';
 import ToastContainer from './components/ToastContainer';
 import LanguageSelector from './components/LanguageSelector';
+import LoadingSpinner from './components/LoadingSpinner';
 import { ToastProvider } from './contexts/ToastContext';
 import axios from 'axios';
 
@@ -44,17 +45,13 @@ function App() {
         <LanguageSelector />
         <ToastContainer />
         <div className="container">
-          <h1 className="app-title">{t('app.title')}</h1>
-          <p className="app-subtitle">
-            {t('app.subtitle')}
-          </p>
+          <div className="container-header">
+            <h1 className="app-title">{t('app.title')}</h1>
+            <p className="app-subtitle">
+              {t('app.subtitle')}
+            </p>
 
-          {loading ? (
-            <div className="glass-card">
-              <div className="loading">{t('app.loading')}</div>
-            </div>
-          ) : (
-            <>
+            {!loading && (
               <div className="tab-nav">
                 <button
                   className={`tab-button ${activeTab === 'chat' ? 'active' : ''}`}
@@ -71,7 +68,15 @@ function App() {
                   {t('app.tabs.config')}
                 </button>
               </div>
+            )}
+          </div>
 
+          {loading ? (
+            <div className="glass-card">
+              <LoadingSpinner message={t('app.loading')} />
+            </div>
+          ) : (
+            <>
               {activeTab === 'config' ? (
                 <ConfigPage
                   isConfigured={isConfigured}

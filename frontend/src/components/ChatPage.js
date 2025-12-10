@@ -11,6 +11,7 @@ import { useChatSubmission } from '../hooks/useChatSubmission';
 import ProgressBar from './Chat/ProgressBar';
 import DynamicFieldsSection from './Chat/DynamicFieldsSection';
 import PropertyFieldsSection from './Chat/PropertyFieldsSection';
+import LoadingSpinner from './LoadingSpinner';
 
 function ChatPage({ isConfigured }) {
   const { t } = useTranslation();
@@ -24,6 +25,7 @@ function ChatPage({ isConfigured }) {
     availableProperties,
     selectedProperties,
     propertyValues,
+    initialLoading,
     handlePropertyChange,
     handleAddProperty,
     handleRemoveProperty,
@@ -79,6 +81,14 @@ function ChatPage({ isConfigured }) {
       }
     }
   };
+
+  if (isConfigured && initialLoading) {
+    return (
+      <div className="glass-card">
+        <LoadingSpinner message={t('config.properties.loading')} />
+      </div>
+    );
+  }
 
   return (
     <div className="glass-card">
