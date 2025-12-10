@@ -7,6 +7,7 @@ import { useToast } from '../contexts/ToastContext';
 import { useConfig } from '../hooks/useConfig';
 import ConfigForm from './Config/ConfigForm';
 import PropertiesSection from './Config/PropertiesSection';
+import LoadingSpinner from './LoadingSpinner';
 
 function ConfigPage({ isConfigured, onConfigSaved }) {
   const { t } = useTranslation();
@@ -21,6 +22,7 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
     availableProperties,
     selectedProperties,
     loadingProperties,
+    initialLoading,
     handlePropertyToggle,
     handleSaveProperties,
     handleSubmit
@@ -47,6 +49,14 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
       error(result.error);
     }
   };
+
+  if (isConfigured && initialLoading) {
+    return (
+      <div className="glass-card">
+        <LoadingSpinner message={t('config.properties.loading')} />
+      </div>
+    );
+  }
 
   return (
     <div className="glass-card">
