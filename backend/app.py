@@ -9,7 +9,11 @@ import re
 app = Flask(__name__)
 CORS(app)
 
-# In-memory storage for Notion configuration (in production, use a database)
+# In-memory storage for Notion configuration
+# WARNING: This is for development only. In production:
+# 1. Use environment variables or a secure secrets manager
+# 2. Encrypt sensitive data at rest
+# 3. Use a proper database with access controls
 notion_config = {}
 
 @app.route('/api/health', methods=['GET'])
@@ -135,7 +139,7 @@ def parse_chat(content, date=None):
         try:
             parsed_date = datetime.fromisoformat(date.replace('Z', '+00:00'))
             formatted_date = parsed_date.strftime('%Y-%m-%d')
-        except:
+        except (ValueError, TypeError):
             formatted_date = datetime.now().strftime('%Y-%m-%d')
     else:
         formatted_date = datetime.now().strftime('%Y-%m-%d')

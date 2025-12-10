@@ -15,10 +15,14 @@
   width: 100%;
   height: 100%;
   z-index: -1;
+  /* Note: URL shortener used as per requirements. For production, use direct URL or local image */
   background-image: url('https://shorturl.at/zHQif');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  /* Fallback gradient if image fails to load */
+  background-color: #667eea;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .background::after {
