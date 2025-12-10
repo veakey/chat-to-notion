@@ -4,15 +4,15 @@
     "subtitle": "Send your chat conversations to Notion with ease",
     "loading": "Loading...",
     "tabs": {
-      "chat": "📝 Send a chat",
-      "config": "⚙️ Configuration"
+      "chat": "Send a chat",
+      "config": "Configuration"
     }
   },
   "config": {
     "title": "Notion Configuration",
     "status": {
-      "configured": "✓ Configured",
-      "notConfigured": "✗ Not configured"
+      "configured": "Configured",
+      "notConfigured": "Not configured"
     },
     "form": {
       "apiKeyLabel": "Internal Integration Secret",
@@ -26,7 +26,7 @@
       "submitLoading": "Saving..."
     },
     "properties": {
-      "title": "⚙️ Additional Properties",
+      "title": "Additional Properties",
       "description": "Select the properties you want to use when sending chats to Notion",
       "loading": "Loading properties...",
       "none": "No additional properties available in your database.",
@@ -34,7 +34,7 @@
       "save": "Save Selected Properties"
     },
     "instructions": {
-      "title": "📖 Configuration Instructions",
+      "title": "Configuration Instructions",
       "step1": "Create a new integration on",
       "step2": "Copy the \"Internal Integration Secret\" (click \"Show\" to see it)",
       "step3": "Create or open a database in Notion",
@@ -46,8 +46,8 @@
   },
   "chat": {
     "title": "Send a chat to Notion",
-    "notConfigured": "⚠️ Please configure your Notion credentials in the Configuration tab first",
-    "missingProperties": "⚠️ The following properties do not exist in your Notion database:",
+    "notConfigured": "Please configure your Notion credentials in the Configuration tab first",
+    "missingProperties": "The following properties do not exist in your Notion database:",
     "missingPropertiesNote": "Please create these properties in Notion or remove these fields before sending.",
     "form": {
       "dateLabel": "Chat date",
@@ -73,7 +73,7 @@
       "removeProperty": "Remove this property"
     },
     "tips": {
-      "title": "💡 Tips",
+      "title": "Tips",
       "tip1": "You can paste complete conversations from ChatGPT or other platforms",
       "tip2": "The first line will be used as the title in Notion",
       "tip3": "Select a date to organize your chats chronologically",
@@ -97,7 +97,7 @@
     "propertiesRefreshed": "Properties refreshed from Notion",
     "chatSent": "Chat sent to Notion successfully ({{blocks}} blocks created)",
     "chatSentWithDate": "Chat sent to Notion successfully ({{blocks}} blocks created) - Date: {{date}}",
-    "chatSentNoDate": "Chat sent to Notion successfully ({{blocks}} blocks created) - ⚠️ No date property found in your database"
+    "chatSentNoDate": "Chat sent to Notion successfully ({{blocks}} blocks created) - No date property found in your database"
   },
   "language": {
     "selector": "Language",
@@ -109,7 +109,7 @@
   "dynamicField": {
     "propertyName": "Property name",
     "value": "Value",
-    "missing": "⚠️ This property does not exist in your Notion database",
+    "missing": "This property does not exist in your Notion database",
     "types": {
       "rich_text": "Text",
       "number": "Number",

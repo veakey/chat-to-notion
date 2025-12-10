@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ChatBubbleLeftRightIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
 import './App.css';
 import ConfigPage from './components/ConfigPage';
 import ChatPage from './components/ChatPage';
@@ -59,12 +60,14 @@ function App() {
                   className={`tab-button ${activeTab === 'chat' ? 'active' : ''}`}
                   onClick={() => setActiveTab('chat')}
                 >
+                  <ChatBubbleLeftRightIcon className="tab-icon" />
                   {t('app.tabs.chat')}
                 </button>
                 <button
                   className={`tab-button ${activeTab === 'config' ? 'active' : ''}`}
                   onClick={() => setActiveTab('config')}
                 >
+                  <Cog6ToothIcon className="tab-icon" />
                   {t('app.tabs.config')}
                 </button>
               </div>

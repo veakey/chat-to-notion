@@ -5,6 +5,22 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useToast } from '../../contexts/ToastContext';
 import axios from 'axios';
+import { 
+  DocumentTextIcon, 
+  HashtagIcon, 
+  ListBulletIcon, 
+  CalendarIcon, 
+  CheckIcon, 
+  LinkIcon, 
+  EnvelopeIcon, 
+  PhoneIcon,
+  ChartBarIcon,
+  ArrowPathIcon,
+  ClockIcon,
+  ExclamationTriangleIcon,
+  InformationCircleIcon,
+  PlusIcon
+} from '@heroicons/react/24/outline';
 import { getPropertyTypeHelp, getPropertyTypeExample, validatePropertyValueLocal } from '../../utils/propertyHelpers';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
@@ -249,21 +265,22 @@ function PropertyFieldsSection({
   const hasMissingRequired = validationSummary && validationSummary.missing.length > 0;
   
   const getTypeIcon = (type) => {
+    const iconClass = "icon-md";
     const icons = {
-      'title': '📝',
-      'rich_text': '📄',
-      'number': '🔢',
-      'select': '📋',
-      'multi_select': '📋',
-      'date': '📅',
-      'checkbox': '☑️',
-      'url': '🔗',
-      'email': '📧',
-      'phone_number': '📞',
-      'relation': '🔗',
-      'rollup': '📊'
+      'title': <DocumentTextIcon className={iconClass} />,
+      'rich_text': <DocumentTextIcon className={iconClass} />,
+      'number': <HashtagIcon className={iconClass} />,
+      'select': <ListBulletIcon className={iconClass} />,
+      'multi_select': <ListBulletIcon className={iconClass} />,
+      'date': <CalendarIcon className={iconClass} />,
+      'checkbox': <CheckIcon className={iconClass} />,
+      'url': <LinkIcon className={iconClass} />,
+      'email': <EnvelopeIcon className={iconClass} />,
+      'phone_number': <PhoneIcon className={iconClass} />,
+      'relation': <LinkIcon className={iconClass} />,
+      'rollup': <ChartBarIcon className={iconClass} />
     };
-    return icons[type] || '📌';
+    return icons[type] || <DocumentTextIcon className={iconClass} />;
   };
 
   const handleRefreshClick = async () => {
@@ -312,11 +329,14 @@ function PropertyFieldsSection({
               borderRadius: '6px',
               color: '#ffffff',
               cursor: disabled || loadingProperties ? 'not-allowed' : 'pointer',
-              opacity: disabled || loadingProperties ? 0.5 : 1
+              opacity: disabled || loadingProperties ? 0.5 : 1,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
             }}
             title={t('chat.propertyFields.refreshTooltip')}
           >
-            {loadingProperties ? '⏳' : '🔄'} {t('chat.propertyFields.refresh')}
+            {loadingProperties ? <ClockIcon className="icon-sm" /> : <ArrowPathIcon className="icon-sm" />} {t('chat.propertyFields.refresh')}
           </button>
           {unselectedProperties.length > 0 && (
             <button
@@ -330,12 +350,16 @@ function PropertyFieldsSection({
                 border: '1px solid rgba(34, 197, 94, 0.5)',
                 borderRadius: '6px',
                 color: '#ffffff',
-                cursor: disabled ? 'not-allowed' : 'pointer',
-                opacity: disabled ? 0.5 : 1
-              }}
-            >
-              + {t('chat.propertyFields.addFields')} ({unselectedProperties.length})
-            </button>
+              cursor: disabled ? 'not-allowed' : 'pointer',
+              opacity: disabled ? 0.5 : 1,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            <PlusIcon className="icon-sm" />
+            {t('chat.propertyFields.addFields')} ({unselectedProperties.length})
+          </button>
           )}
         </div>
       </div>
@@ -402,7 +426,7 @@ function PropertyFieldsSection({
           fontSize: '0.875rem',
           color: '#fca5a5'
         }}>
-          ⚠️ Required properties missing: {validationSummary.missing.join(', ')}
+          <ExclamationTriangleIcon className="icon-sm icon-inline icon-mr-1" /> Required properties missing: {validationSummary.missing.join(', ')}
         </div>
       )}
       
@@ -430,7 +454,7 @@ function PropertyFieldsSection({
                     color: 'rgba(196, 181, 253, 0.7)',
                     cursor: 'help'
                   }} title={helpText}>
-                    ℹ️
+                    <InformationCircleIcon className="icon-sm" />
                   </span>
                 )}
               </label>

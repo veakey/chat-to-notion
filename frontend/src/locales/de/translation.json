@@ -4,15 +4,15 @@
     "subtitle": "Senden Sie Ihre Chat-Unterhaltungen ganz einfach an Notion",
     "loading": "Laden...",
     "tabs": {
-      "chat": "📝 Chat senden",
-      "config": "⚙️ Konfiguration"
+      "chat": "Chat senden",
+      "config": "Konfiguration"
     }
   },
   "config": {
     "title": "Notion-Konfiguration",
     "status": {
-      "configured": "✓ Konfiguriert",
-      "notConfigured": "✗ Nicht konfiguriert"
+      "configured": "Konfiguriert",
+      "notConfigured": "Nicht konfiguriert"
     },
     "form": {
       "apiKeyLabel": "Interner Integrationsschlüssel",
@@ -26,7 +26,7 @@
       "submitLoading": "Speichern..."
     },
     "properties": {
-      "title": "⚙️ Zusätzliche Eigenschaften",
+      "title": "Zusätzliche Eigenschaften",
       "description": "Wählen Sie die Eigenschaften aus, die Sie beim Senden von Chats an Notion verwenden möchten",
       "loading": "Eigenschaften werden geladen...",
       "none": "Keine zusätzlichen Eigenschaften in Ihrer Datenbank verfügbar.",
@@ -34,7 +34,7 @@
       "save": "Ausgewählte Eigenschaften speichern"
     },
     "instructions": {
-      "title": "📖 Konfigurationsanleitung",
+      "title": "Konfigurationsanleitung",
       "step1": "Erstellen Sie eine neue Integration auf",
       "step2": "Kopieren Sie den \"Internen Integrationsschlüssel\" (klicken Sie auf \"Anzeigen\", um ihn zu sehen)",
       "step3": "Erstellen oder öffnen Sie eine Datenbank in Notion",
@@ -46,8 +46,8 @@
   },
   "chat": {
     "title": "Chat an Notion senden",
-    "notConfigured": "⚠️ Bitte konfigurieren Sie zuerst Ihre Notion-Anmeldedaten im Konfigurations-Tab",
-    "missingProperties": "⚠️ Die folgenden Eigenschaften existieren nicht in Ihrer Notion-Datenbank:",
+    "notConfigured": "Bitte konfigurieren Sie zuerst Ihre Notion-Anmeldedaten im Konfigurations-Tab",
+    "missingProperties": "Die folgenden Eigenschaften existieren nicht in Ihrer Notion-Datenbank:",
     "missingPropertiesNote": "Bitte erstellen Sie diese Eigenschaften in Notion oder entfernen Sie diese Felder vor dem Senden.",
     "form": {
       "dateLabel": "Chat-Datum",
@@ -73,7 +73,7 @@
       "removeProperty": "Diese Eigenschaft entfernen"
     },
     "tips": {
-      "title": "💡 Tipps",
+      "title": "Tipps",
       "tip1": "Sie können vollständige Unterhaltungen von ChatGPT oder anderen Plattformen einfügen",
       "tip2": "Die erste Zeile wird als Titel in Notion verwendet",
       "tip3": "Wählen Sie ein Datum, um Ihre Chats chronologisch zu organisieren",
@@ -97,7 +97,7 @@
     "propertiesRefreshed": "Eigenschaften von Notion aktualisiert",
     "chatSent": "Chat erfolgreich an Notion gesendet ({{blocks}} Blöcke erstellt)",
     "chatSentWithDate": "Chat erfolgreich an Notion gesendet ({{blocks}} Blöcke erstellt) - Datum: {{date}}",
-    "chatSentNoDate": "Chat erfolgreich an Notion gesendet ({{blocks}} Blöcke erstellt) - ⚠️ Keine Datumseigenschaft in Ihrer Datenbank gefunden"
+    "chatSentNoDate": "Chat erfolgreich an Notion gesendet ({{blocks}} Blöcke erstellt) - Keine Datumseigenschaft in Ihrer Datenbank gefunden"
   },
   "language": {
     "selector": "Sprache",
@@ -109,7 +109,7 @@
   "dynamicField": {
     "propertyName": "Eigenschaftsname",
     "value": "Wert",
-    "missing": "⚠️ Diese Eigenschaft existiert nicht in Ihrer Notion-Datenbank",
+    "missing": "Diese Eigenschaft existiert nicht in Ihrer Notion-Datenbank",
     "types": {
       "rich_text": "Text",
       "number": "Zahl",

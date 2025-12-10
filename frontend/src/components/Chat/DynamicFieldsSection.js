@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import DynamicField from './DynamicField';
 
 function DynamicFieldsSection({ 
@@ -36,6 +37,7 @@ function DynamicFieldsSection({
             cursor: dynamicFields.length >= 10 ? 'not-allowed' : 'pointer'
           }}
         >
+          <PlusIcon className="icon-sm" />
           {t('chat.dynamicFields.add')}
         </button>
       </div>

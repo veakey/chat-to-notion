@@ -4,15 +4,15 @@
     "subtitle": "Invia le tue conversazioni chat a Notion con facilità",
     "loading": "Caricamento...",
     "tabs": {
-      "chat": "📝 Invia un chat",
-      "config": "⚙️ Configurazione"
+      "chat": "Invia un chat",
+      "config": "Configurazione"
     }
   },
   "config": {
     "title": "Configurazione Notion",
     "status": {
-      "configured": "✓ Configurato",
-      "notConfigured": "✗ Non configurato"
+      "configured": "Configurato",
+      "notConfigured": "Non configurato"
     },
     "form": {
       "apiKeyLabel": "Codice segreto dell'integrazione interna",
@@ -26,7 +26,7 @@
       "submitLoading": "Salvataggio..."
     },
     "properties": {
-      "title": "⚙️ Proprietà aggiuntive",
+      "title": "Proprietà aggiuntive",
       "description": "Seleziona le proprietà che desideri utilizzare quando invii chat a Notion",
       "loading": "Caricamento proprietà...",
       "none": "Nessuna proprietà aggiuntiva disponibile nel tuo database.",
@@ -34,7 +34,7 @@
       "save": "Salva proprietà selezionate"
     },
     "instructions": {
-      "title": "📖 Istruzioni di configurazione",
+      "title": "Istruzioni di configurazione",
       "step1": "Crea una nuova integrazione su",
       "step2": "Copia il \"Codice segreto dell'integrazione interna\" (clicca su \"Mostra\" per vederlo)",
       "step3": "Crea o apri un database in Notion",
@@ -46,8 +46,8 @@
   },
   "chat": {
     "title": "Invia un chat a Notion",
-    "notConfigured": "⚠️ Configura prima le tue credenziali Notion nella scheda Configurazione",
-    "missingProperties": "⚠️ Le seguenti proprietà non esistono nel tuo database Notion:",
+    "notConfigured": "Configura prima le tue credenziali Notion nella scheda Configurazione",
+    "missingProperties": "Le seguenti proprietà non esistono nel tuo database Notion:",
     "missingPropertiesNote": "Crea queste proprietà in Notion o rimuovi questi campi prima di inviare.",
     "form": {
       "dateLabel": "Data del chat",
@@ -73,7 +73,7 @@
       "removeProperty": "Rimuovi questa proprietà"
     },
     "tips": {
-      "title": "💡 Suggerimenti",
+      "title": "Suggerimenti",
       "tip1": "Puoi incollare conversazioni complete da ChatGPT o altre piattaforme",
       "tip2": "La prima riga verrà utilizzata come titolo in Notion",
       "tip3": "Seleziona una data per organizzare i tuoi chat cronologicamente",
@@ -97,7 +97,7 @@
     "propertiesRefreshed": "Proprietà aggiornate da Notion",
     "chatSent": "Chat inviato a Notion con successo ({{blocks}} blocchi creati)",
     "chatSentWithDate": "Chat inviato a Notion con successo ({{blocks}} blocchi creati) - Data: {{date}}",
-    "chatSentNoDate": "Chat inviato a Notion con successo ({{blocks}} blocchi creati) - ⚠️ Nessuna proprietà data trovata nel tuo database"
+    "chatSentNoDate": "Chat inviato a Notion con successo ({{blocks}} blocchi creati) - Nessuna proprietà data trovata nel tuo database"
   },
   "language": {
     "selector": "Lingua",
@@ -109,7 +109,7 @@
   "dynamicField": {
     "propertyName": "Nome della proprietà",
     "value": "Valore",
-    "missing": "⚠️ Questa proprietà non esiste nel tuo database Notion",
+    "missing": "Questa proprietà non esiste nel tuo database Notion",
     "types": {
       "rich_text": "Testo",
       "number": "Numero",
