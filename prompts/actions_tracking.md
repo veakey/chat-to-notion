@@ -64,3 +64,58 @@
 - Sauvegarde de la préférence de langue dans localStorage
 - Traduction des messages d'erreur backend
 - Documentation pour l'ajout de nouvelles langues
+
+## [#10] Persistance de la configuration avec SQLite
+- Remplacement du stockage en mémoire par une base de données SQLite
+- Création du module `backend/db.py` pour gérer la base de données
+- Migration automatique des schémas avec support des colonnes additionnelles
+- Stockage sécurisé des credentials Notion dans `notion_config.db`
+- Détection automatique des propriétés de la base Notion (title_property, date_property)
+- Support des propriétés additionnelles et champs dynamiques
+- Redirection du chemin de la DB vers le répertoire userData en mode Electron
+
+## [#11] Amélioration de l'interface utilisateur
+- Remplacement des emojis par Hero Icons (@heroicons/react)
+- Implémentation d'un système de notifications toast avec contexte global
+- Création d'un composant LoadingSpinner avec style GlassUI
+- Amélioration de la lisibilité du texte (opacité, blur, text-shadow)
+- Uniformisation des hauteurs de boutons
+- Amélioration de la lisibilité des dropdowns
+- Correction des icônes dans la section configuration (couleur blanche)
+- Animation d'expansion fluide pour les glass-cards
+- Header fixe pour éviter les décalages lors du chargement
+- Chargement initial des données en parallèle avec Promise.all
+- Affichage du spinner pendant le chargement initial
+
+## [#12] Internationalisation complète (i18n)
+- Installation et configuration de react-i18next
+- Création des fichiers de traduction pour FR, EN, DE, IT
+- Extraction de tous les textes hardcodés vers les fichiers de traduction
+- Composant LanguageSelector avec icône Hero
+- Détection automatique de la langue du navigateur
+- Sauvegarde de la préférence dans localStorage
+- Traduction des messages d'erreur backend via errorTranslator
+- Documentation pour l'ajout de nouvelles langues
+- Suppression des emojis des traductions
+
+## [#13] Infrastructure de tests
+- Configuration de pytest pour le backend
+- Configuration de React Testing Library pour le frontend
+- Création de la structure de tests (backend/tests/, frontend/src/__tests__/)
+- Documentation pour l'exécution des tests (README.md dans chaque dossier tests)
+- Ajout des dépendances de test (pytest, pytest-cov, pytest-mock, @testing-library/*)
+- Instructions spécifiques pour Windows (python -m pytest)
+
+## [#14] Conversion en application Electron desktop
+- Configuration d'Electron et electron-builder dans package.json
+- Création du processus principal Electron (electron/main.js)
+- Intégration du backend Flask comme processus enfant
+- Gestion du chemin de la base de données vers le répertoire userData
+- Scripts de build pour Windows, Mac et Linux
+- Configuration pour build portable (Windows) au lieu d'installer
+- Script de build du backend avec PyInstaller (build-backend.bat)
+- Gestion des erreurs et logs pour le débogage
+- Correction des dépendances (electron-is-dev dans dependencies)
+- Amélioration de la gestion des chemins de fichiers en production
+- Affichage de la fenêtre avant le démarrage du backend pour meilleure UX
+- Gestion de plusieurs chemins alternatifs pour le chargement du frontend
