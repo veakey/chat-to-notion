@@ -1,0 +1,117 @@
+{
+  "app": {
+    "title": "Chat zu Notion",
+    "subtitle": "Senden Sie Ihre Chat-Unterhaltungen ganz einfach an Notion",
+    "loading": "Laden...",
+    "tabs": {
+      "chat": "📝 Chat senden",
+      "config": "⚙️ Konfiguration"
+    }
+  },
+  "config": {
+    "title": "Notion-Konfiguration",
+    "status": {
+      "configured": "✓ Konfiguriert",
+      "notConfigured": "✗ Nicht konfiguriert"
+    },
+    "form": {
+      "apiKeyLabel": "Interner Integrationsschlüssel",
+      "apiKeyPlaceholder": "secret_...",
+      "apiKeyHelp": "Kopieren Sie den geheimen Code aus Ihrer {{link}} (\"Anzeigen\"- oder \"Aktualisieren\"-Button)",
+      "apiKeyLink": "Notion-Integration",
+      "databaseIdLabel": "Datenbank-ID",
+      "databaseIdPlaceholder": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "databaseIdHelp": "Die Datenbank muss die Eigenschaften \"Name\" (Titel) und \"Datum\" (Datum) haben",
+      "submit": "Konfiguration speichern",
+      "submitLoading": "Speichern..."
+    },
+    "properties": {
+      "title": "⚙️ Zusätzliche Eigenschaften",
+      "description": "Wählen Sie die Eigenschaften aus, die Sie beim Senden von Chats an Notion verwenden möchten",
+      "loading": "Eigenschaften werden geladen...",
+      "none": "Keine zusätzlichen Eigenschaften in Ihrer Datenbank verfügbar.",
+      "type": "Typ: {{type}}",
+      "save": "Ausgewählte Eigenschaften speichern"
+    },
+    "instructions": {
+      "title": "📖 Konfigurationsanleitung",
+      "step1": "Erstellen Sie eine neue Integration auf",
+      "step2": "Kopieren Sie den \"Internen Integrationsschlüssel\" (klicken Sie auf \"Anzeigen\", um ihn zu sehen)",
+      "step3": "Erstellen oder öffnen Sie eine Datenbank in Notion",
+      "step4": "Stellen Sie sicher, dass Ihre Datenbank die Eigenschaften \"Name\" (Titel) und \"Datum\" (Datum) hat",
+      "step5": "Teilen Sie die Datenbank mit Ihrer Integration (klicken Sie auf \"...\" → \"Verbindungen hinzufügen\")",
+      "step6": "Kopieren Sie die Datenbank-ID aus der URL: notion.so/[workspace]/[database_id]?v=...",
+      "step6Note": "Die ID ist der Teil zwischen dem letzten \"/\" und dem \"?\" in der URL"
+    }
+  },
+  "chat": {
+    "title": "Chat an Notion senden",
+    "notConfigured": "⚠️ Bitte konfigurieren Sie zuerst Ihre Notion-Anmeldedaten im Konfigurations-Tab",
+    "missingProperties": "⚠️ Die folgenden Eigenschaften existieren nicht in Ihrer Notion-Datenbank:",
+    "missingPropertiesNote": "Bitte erstellen Sie diese Eigenschaften in Notion oder entfernen Sie diese Felder vor dem Senden.",
+    "form": {
+      "dateLabel": "Chat-Datum",
+      "contentLabel": "Chat-Inhalt",
+      "contentPlaceholder": "Fügen Sie hier Ihre Chat-Unterhaltung ein...\n\nBeispiel:\nBenutzer: Was ist React?\nAssistent: React ist eine JavaScript-Bibliothek zum Erstellen von Benutzeroberflächen...",
+      "submit": "An Notion senden",
+      "submitLoading": "Wird gesendet..."
+    },
+    "dynamicFields": {
+      "title": "Dynamische Felder ({{count}}/10)",
+      "add": "+ Feld hinzufügen",
+      "maxReached": "Maximal 10 dynamische Felder erlaubt"
+    },
+    "propertyFields": {
+      "title": "Zusätzliche Eigenschaften",
+      "placeholder": "Geben Sie einen Wert für {{name}} ({{type}}) ein"
+    },
+    "tips": {
+      "title": "💡 Tipps",
+      "tip1": "Sie können vollständige Unterhaltungen von ChatGPT oder anderen Plattformen einfügen",
+      "tip2": "Die erste Zeile wird als Titel in Notion verwendet",
+      "tip3": "Wählen Sie ein Datum, um Ihre Chats chronologisch zu organisieren",
+      "tip4": "Der Chat wird als neue Seite in Ihrer konfigurierten Notion-Datenbank gespeichert"
+    }
+  },
+  "errors": {
+    "notConfigured": "Bitte konfigurieren Sie zuerst die Notion-Anmeldedaten im Konfigurations-Tab",
+    "contentRequired": "Chat-Inhalt ist erforderlich",
+    "apiKeyRequired": "Geheimer Code und Datenbank-ID sind erforderlich",
+    "invalidCredentials": "Ungültige Notion-Anmeldedaten: {{error}}",
+    "noTitleProperty": "Keine Eigenschaft vom Typ 'title' in der Datenbank gefunden. Bitte erstellen Sie eine Eigenschaft vom Typ Titel.",
+    "notionNotConfigured": "Notion ist nicht konfiguriert. Bitte konfigurieren Sie zuerst die Anmeldedaten.",
+    "propertyDetectionError": "Fehler beim Erkennen der Eigenschaften: {{error}}"
+  },
+  "success": {
+    "configSaved": "Konfiguration erfolgreich gespeichert",
+    "propertiesSaved": "Zusätzliche Eigenschaften erfolgreich gespeichert",
+    "dynamicFieldsSaved": "Dynamische Felder erfolgreich gespeichert",
+    "chatSent": "Chat erfolgreich an Notion gesendet ({{blocks}} Blöcke erstellt)",
+    "chatSentWithDate": "Chat erfolgreich an Notion gesendet ({{blocks}} Blöcke erstellt) - Datum: {{date}}",
+    "chatSentNoDate": "Chat erfolgreich an Notion gesendet ({{blocks}} Blöcke erstellt) - ⚠️ Keine Datumseigenschaft in Ihrer Datenbank gefunden"
+  },
+  "language": {
+    "selector": "Sprache",
+    "french": "Français",
+    "english": "English",
+    "german": "Deutsch",
+    "italian": "Italiano"
+  },
+  "dynamicField": {
+    "propertyName": "Eigenschaftsname",
+    "value": "Wert",
+    "missing": "⚠️ Diese Eigenschaft existiert nicht in Ihrer Notion-Datenbank",
+    "types": {
+      "rich_text": "Text",
+      "number": "Zahl",
+      "select": "Auswahl",
+      "multi_select": "Mehrfachauswahl",
+      "date": "Datum",
+      "checkbox": "Checkbox",
+      "url": "URL",
+      "email": "E-Mail",
+      "phone_number": "Telefon"
+    }
+  }
+}
+

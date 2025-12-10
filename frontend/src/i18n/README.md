@@ -167,6 +167,6 @@ Pour ajouter la traduction d'un nouveau message d'erreur :
 
 - 🇫🇷 Français (fr) - Langue par défaut
 - 🇬🇧 English (en)
-- 🇪🇸 Español (es) - À venir
-- 🇩🇪 Deutsch (de) - À venir
+- 🇩🇪 Deutsch (de)
+- 🇮🇹 Italiano (it)
 

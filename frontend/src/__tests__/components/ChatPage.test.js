@@ -5,6 +5,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ChatPage from '../../components/ChatPage';
 import { ToastProvider } from '../../contexts/ToastContext';
+import '../../i18n/config';
 
 // Mock des hooks
 jest.mock('../../hooks/useChatForm', () => ({
