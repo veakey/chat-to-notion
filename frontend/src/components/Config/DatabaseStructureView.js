@@ -20,11 +20,32 @@ function DatabaseStructureView() {
   }, []);
 
   const loadStructure = async () => {
+    // Check cache first
+    const cacheKey = 'notion_database_structure';
+    const cached = localStorage.getItem(cacheKey);
+    const cacheTime = localStorage.getItem(`${cacheKey}_time`);
+    
+    // Use cache if less than 5 minutes old
+    if (cached && cacheTime) {
+      const age = Date.now() - parseInt(cacheTime);
+      if (age < 5 * 60 * 1000) { // 5 minutes
+        try {
+          setStructure(JSON.parse(cached));
+          return;
+        } catch (e) {
+          // Invalid cache, continue to fetch
+        }
+      }
+    }
+    
     setLoading(true);
     setError(null);
     try {
       const response = await axios.get(`${API_BASE_URL}/api/config/database-structure`);
       setStructure(response.data);
+      // Cache the structure
+      localStorage.setItem(cacheKey, JSON.stringify(response.data));
+      localStorage.setItem(`${cacheKey}_time`, Date.now().toString());
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to load database structure');
     } finally {

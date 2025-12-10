@@ -63,7 +63,14 @@
     },
     "propertyFields": {
       "title": "Proprietà aggiuntive",
-      "placeholder": "Inserisci un valore per {{name}} ({{type}})"
+      "placeholder": "Inserisci un valore per {{name}} ({{type}})",
+      "refresh": "Aggiorna",
+      "refreshTooltip": "Ricarica le proprietà da Notion",
+      "addFields": "Aggiungi Campi",
+      "availableProperties": "Proprietà Disponibili",
+      "propertyAdded": "Proprietà '{{name}}' aggiunta",
+      "propertyRemoved": "Proprietà '{{name}}' rimossa",
+      "removeProperty": "Rimuovi questa proprietà"
     },
     "tips": {
       "title": "💡 Suggerimenti",
@@ -80,12 +87,14 @@
     "invalidCredentials": "Credenziali Notion non valide: {{error}}",
     "noTitleProperty": "Nessuna proprietà di tipo 'title' trovata nel database. Crea una proprietà di tipo titolo.",
     "notionNotConfigured": "Notion non è configurato. Configura prima le credenziali.",
-    "propertyDetectionError": "Errore durante il rilevamento delle proprietà: {{error}}"
+    "propertyDetectionError": "Errore durante il rilevamento delle proprietà: {{error}}",
+    "propertiesRefreshFailed": "Impossibile aggiornare le proprietà"
   },
   "success": {
     "configSaved": "Configurazione salvata con successo",
     "propertiesSaved": "Proprietà aggiuntive salvate con successo",
     "dynamicFieldsSaved": "Campi dinamici salvati con successo",
+    "propertiesRefreshed": "Proprietà aggiornate da Notion",
     "chatSent": "Chat inviato a Notion con successo ({{blocks}} blocchi creati)",
     "chatSentWithDate": "Chat inviato a Notion con successo ({{blocks}} blocchi creati) - Data: {{date}}",
     "chatSentNoDate": "Chat inviato a Notion con successo ({{blocks}} blocchi creati) - ⚠️ Nessuna proprietà data trovata nel tuo database"

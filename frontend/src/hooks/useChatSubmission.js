@@ -45,7 +45,7 @@ export function useChatSubmission() {
     }
   };
 
-  const submitChat = async (content, date, propertyValues, dynamicFields) => {
+  const submitChat = async (content, date, propertyValues, dynamicFields, availableProperties = []) => {
     setLoading(true);
     setProgress(10);
 
@@ -59,6 +59,54 @@ export function useChatSubmission() {
           success: false,
           error: i18n.t('chat.missingProperties') + ' ' + validation.missing.join(', ')
         };
+      }
+
+      setProgress(20);
+      
+      // Valider les valeurs des propriétés avant soumission
+      if (Object.keys(propertyValues).length > 0) {
+        try {
+          const validationResponse = await axios.post(`${API_BASE_URL}/api/config/validate-property-values`, {
+            propertyValues: propertyValues
+          });
+          
+          const validationErrors = [];
+          const missingRequired = [];
+          
+          Object.keys(validationResponse.data.validation).forEach(propName => {
+            const validation = validationResponse.data.validation[propName];
+            if (!validation.valid) {
+              validationErrors.push(`${propName}: ${validation.error}`);
+            }
+            
+            // Check required properties
+            const prop = availableProperties.find(p => p.name === propName);
+            if (prop && prop.required && (!propertyValues[propName] || propertyValues[propName] === '')) {
+              missingRequired.push(propName);
+            }
+          });
+          
+          if (missingRequired.length > 0) {
+            setProgress(0);
+            setLoading(false);
+            return {
+              success: false,
+              error: `Required properties missing: ${missingRequired.join(', ')}`
+            };
+          }
+          
+          if (validationErrors.length > 0) {
+            setProgress(0);
+            setLoading(false);
+            return {
+              success: false,
+              error: `Validation errors: ${validationErrors.join('; ')}`
+            };
+          }
+        } catch (err) {
+          // Continue if validation endpoint fails (shouldn't block submission)
+          console.warn('Property validation failed:', err);
+        }
       }
 
       setProgress(40);
