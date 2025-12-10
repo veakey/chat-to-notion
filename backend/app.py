@@ -151,4 +151,6 @@ def parse_chat(content, date=None):
     }
 
 if __name__ == '__main__':
+    # WARNING: debug=True is for development only!
+    # In production, set debug=False and use a production WSGI server like Gunicorn
     app.run(debug=True, host='0.0.0.0', port=5000)
