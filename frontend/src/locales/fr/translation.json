@@ -10,6 +10,17 @@
   },
   "config": {
     "title": "Configuration Notion",
+    "add": "Ajouter une configuration",
+    "list": "Configurations",
+    "noConfig": "Aucune configuration pour le moment.",
+    "select": "Activer",
+    "active": "Active",
+    "addConfig": "Ajouter une configuration",
+    "editConfig": "Modifier la configuration",
+    "apiKey": "Clé API",
+    "databaseId": "ID de la base de données",
+    "label": "Nom personnalisé",
+    "labelPlaceholder": "Nom friendly (ex: Projet Alpha)",
     "status": {
       "configured": "Configuré",
       "notConfigured": "Non configuré"
@@ -46,6 +57,8 @@
   },
   "chat": {
     "title": "Envoyer un chat vers Notion",
+    "selectConfig": "Sélectionnez une configuration",
+    "activeConfig": "Base active",
     "notConfigured": "Veuillez d'abord configurer vos identifiants Notion dans l'onglet Configuration",
     "missingProperties": "Les propriétés suivantes n'existent pas dans votre base de données Notion :",
     "missingPropertiesNote": "Veuillez créer ces propriétés dans Notion ou supprimer ces champs avant d'envoyer.",
@@ -81,6 +94,8 @@
     }
   },
   "errors": {
+    "requiredFields": "Les champs requis doivent être remplis",
+    "generic": "Une erreur est survenue",
     "notConfigured": "Veuillez d'abord configurer les identifiants Notion dans l'onglet Configuration",
     "contentRequired": "Le contenu du chat est requis",
     "apiKeyRequired": "Le code secret et l'ID de la base de données sont requis",
@@ -92,6 +107,8 @@
   },
   "success": {
     "configSaved": "Configuration enregistrée avec succès",
+    "configUpdated": "Configuration mise à jour avec succès",
+    "configDeleted": "Configuration supprimée avec succès",
     "propertiesSaved": "Propriétés supplémentaires enregistrées avec succès",
     "dynamicFieldsSaved": "Champs dynamiques enregistrés avec succès",
     "propertiesRefreshed": "Propriétés actualisées depuis Notion",
@@ -119,8 +136,16 @@
       "checkbox": "Case à cocher",
       "url": "URL",
       "email": "Email",
-      "phone_number": "Téléphone"
+      "phone_number": "Téléphone",
+      "relation": "Relation"
     }
+  },
+  "common": {
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "saving": "Enregistrement..."
   }
 }
 

@@ -10,6 +10,17 @@
   },
   "config": {
     "title": "Notion Configuration",
+    "add": "Add configuration",
+    "list": "Configurations",
+    "noConfig": "No configuration yet.",
+    "select": "Activate",
+    "active": "Active",
+    "addConfig": "Add configuration",
+    "editConfig": "Edit configuration",
+    "apiKey": "API key",
+    "databaseId": "Database ID",
+    "label": "Friendly name",
+    "labelPlaceholder": "Friendly name (e.g. Project Alpha)",
     "status": {
       "configured": "Configured",
       "notConfigured": "Not configured"
@@ -46,6 +57,8 @@
   },
   "chat": {
     "title": "Send a chat to Notion",
+    "selectConfig": "Select a configuration",
+    "activeConfig": "Active database",
     "notConfigured": "Please configure your Notion credentials in the Configuration tab first",
     "missingProperties": "The following properties do not exist in your Notion database:",
     "missingPropertiesNote": "Please create these properties in Notion or remove these fields before sending.",
@@ -81,6 +94,8 @@
     }
   },
   "errors": {
+    "requiredFields": "Required fields must be filled",
+    "generic": "An error occurred",
     "notConfigured": "Please configure Notion credentials in the Configuration tab first",
     "contentRequired": "Chat content is required",
     "apiKeyRequired": "Secret code and database ID are required",
@@ -92,6 +107,8 @@
   },
   "success": {
     "configSaved": "Configuration saved successfully",
+    "configUpdated": "Configuration updated successfully",
+    "configDeleted": "Configuration deleted successfully",
     "propertiesSaved": "Additional properties saved successfully",
     "dynamicFieldsSaved": "Dynamic fields saved successfully",
     "propertiesRefreshed": "Properties refreshed from Notion",
@@ -119,8 +136,16 @@
       "checkbox": "Checkbox",
       "url": "URL",
       "email": "Email",
-      "phone_number": "Phone"
+      "phone_number": "Phone",
+      "relation": "Relation"
     }
+  },
+  "common": {
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving..."
   }
 }
 

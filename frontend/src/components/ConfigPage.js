@@ -1,56 +1,123 @@
 /**
- * Page de configuration Notion
+ * Page de configuration Notion (multi-configs)
  */
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useToast } from '../contexts/ToastContext';
 import { useConfig } from '../hooks/useConfig';
-import ConfigForm from './Config/ConfigForm';
 import PropertiesSection from './Config/PropertiesSection';
 import LoadingSpinner from './LoadingSpinner';
 
-function ConfigPage({ isConfigured, onConfigSaved }) {
+function ConfigPage({
+  configs = [],
+  activeConfigId,
+  onSelectConfig,
+  onRefreshConfigs,
+  onAddConfig,
+  onUpdateConfig,
+  onDeleteConfig,
+  loadingConfigs,
+  initialLoading,
+}) {
   const { t } = useTranslation();
   const { success, error } = useToast();
-  
+
+  const activeConfig = useMemo(
+    () => configs.find((c) => c.id === activeConfigId),
+    [configs, activeConfigId]
+  );
+
+  // Gestion des propriétés supplémentaires pour la config active
   const {
-    apiKey,
-    setApiKey,
-    databaseId,
-    setDatabaseId,
-    loading,
     availableProperties,
     selectedProperties,
     loadingProperties,
-    initialLoading,
+    initialLoading: propsInitialLoading,
     handlePropertyToggle,
     handleSaveProperties,
-    handleSubmit
-  } = useConfig(isConfigured);
+  } = useConfig(Boolean(activeConfig), activeConfig?.id);
 
-  const onSubmit = async (e) => {
+  // Etat du formulaire modal (add / edit)
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editConfigId, setEditConfigId] = useState(null);
+  const [form, setForm] = useState({ apiKey: '', databaseId: '', label: '' });
+  const [saving, setSaving] = useState(false);
+
+  const openAddModal = () => {
+    setEditConfigId(null);
+    setForm({ apiKey: '', databaseId: '', label: '' });
+    setModalOpen(true);
+  };
+
+  const openEditModal = (cfg) => {
+    setEditConfigId(cfg.id);
+    setForm({ apiKey: '', databaseId: cfg.databaseId || '', label: cfg.label || '' });
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setForm({ apiKey: '', databaseId: '', label: '' });
+    setEditConfigId(null);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmitModal = async (e) => {
     e.preventDefault();
-    const result = await handleSubmit();
-    
-    if (result.success) {
-      success(result.message);
-      onConfigSaved();
-    } else {
-      error(result.error);
+    setSaving(true);
+    try {
+      if (editConfigId) {
+        if (!form.apiKey || !form.databaseId) {
+          error(t('errors.requiredFields'));
+          setSaving(false);
+          return;
+        }
+        await onUpdateConfig(editConfigId, {
+          apiKey: form.apiKey,
+          databaseId: form.databaseId,
+          label: form.label,
+          setActive: true,
+        });
+        success(t('success.configUpdated'));
+      } else {
+        if (!form.apiKey || !form.databaseId) {
+          error(t('errors.requiredFields'));
+          setSaving(false);
+          return;
+        }
+        await onAddConfig({
+          apiKey: form.apiKey,
+          databaseId: form.databaseId,
+          label: form.label,
+        });
+        success(t('success.configSaved'));
+      }
+      await onRefreshConfigs();
+      closeModal();
+    } catch (err) {
+      const msg = err?.response?.data?.error || t('errors.generic');
+      error(msg);
+    } finally {
+      setSaving(false);
     }
   };
 
-  const onSaveProperties = async () => {
-    const result = await handleSaveProperties();
-    
-    if (result.success) {
-      success(result.message);
-    } else {
-      error(result.error);
+  const handleDelete = async (configId) => {
+    try {
+      await onDeleteConfig(configId);
+      success(t('success.configDeleted'));
+      await onRefreshConfigs();
+    } catch (err) {
+      const msg = err?.response?.data?.error || t('errors.generic');
+      error(msg);
     }
   };
 
-  if (isConfigured && initialLoading) {
+  if (initialLoading) {
     return (
       <div className="glass-card">
         <LoadingSpinner message={t('config.properties.loading')} />
@@ -60,36 +127,72 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
 
   return (
     <div className="glass-card">
-      <h2 style={{ color: '#ffffff', marginBottom: '20px' }}>
+      <h2 style={{ color: '#ffffff', marginBottom: '12px' }}>
         {t('config.title')}
       </h2>
 
-      <div style={{ marginBottom: '20px' }}>
-        <span
-          className={`status-badge ${
-            isConfigured ? 'status-configured' : 'status-not-configured'
-          }`}
-        >
-          {isConfigured ? t('config.status.configured') : t('config.status.notConfigured')}
-        </span>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <div>
+          <span
+            className={`status-badge ${
+              activeConfig ? 'status-configured' : 'status-not-configured'
+            }`}
+          >
+            {activeConfig ? t('config.status.configured') : t('config.status.notConfigured')}
+          </span>
+          {activeConfig && (
+            <span style={{ marginLeft: 10, color: '#e5e7eb' }}>
+              {t('config.active')}: {activeConfig.label || activeConfig.databaseTitle || activeConfig.databaseId}
+            </span>
+          )}
+        </div>
+        <button className="btn btn-secondary" onClick={openAddModal}>
+          {t('config.add')}
+        </button>
       </div>
 
-      <ConfigForm
-        apiKey={apiKey}
-        setApiKey={setApiKey}
-        databaseId={databaseId}
-        setDatabaseId={setDatabaseId}
-        onSubmit={onSubmit}
-        loading={loading}
-      />
+      <div className="glass-section" style={{ marginBottom: 20 }}>
+        <h3 style={{ color: '#fff', marginBottom: 10 }}>{t('config.list')}</h3>
+        {configs.length === 0 ? (
+          <div className="message message-info">{t('config.noConfig')}</div>
+        ) : (
+          <div className="config-list">
+            {configs.map((cfg) => (
+              <div key={cfg.id} className="config-item">
+                <div>
+                  <div style={{ color: '#fff', fontWeight: 600 }}>
+                    {cfg.label || cfg.databaseTitle || cfg.databaseId}
+                  </div>
+                  <div style={{ color: 'rgba(255,255,255,0.75)', fontSize: 12 }}>
+                    {cfg.databaseId}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  {!cfg.isActive && (
+                    <button className="btn btn-secondary" onClick={() => onSelectConfig(cfg.id)} disabled={loadingConfigs}>
+                      {t('config.select')}
+                    </button>
+                  )}
+                  <button className="btn btn-tertiary" onClick={() => openEditModal(cfg)} disabled={loadingConfigs}>
+                    {t('common.edit')}
+                  </button>
+                  <button className="btn btn-danger" onClick={() => handleDelete(cfg.id)} disabled={loadingConfigs}>
+                    {t('common.delete')}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
-      {isConfigured && (
+      {activeConfig && (
         <PropertiesSection
           availableProperties={availableProperties}
           selectedProperties={selectedProperties}
           onPropertyToggle={handlePropertyToggle}
-          onSave={onSaveProperties}
-          loadingProperties={loadingProperties}
+          onSave={handleSaveProperties}
+          loadingProperties={loadingProperties || propsInitialLoading}
         />
       )}
 
@@ -130,6 +233,57 @@ function ConfigPage({ isConfigured, onConfigSaved }) {
           </li>
         </ol>
       </div>
+
+      {modalOpen && (
+        <div className="modal-backdrop">
+          <div className="modal-card">
+            <h3 style={{ color: '#fff', marginBottom: 12 }}>
+              {editConfigId ? t('config.editConfig') : t('config.addConfig')}
+            </h3>
+            <form onSubmit={handleSubmitModal} className="modal-form">
+              <label className="form-label">{t('config.apiKey')}</label>
+              <input
+                name="apiKey"
+                type="text"
+                className="form-input"
+                value={form.apiKey}
+                onChange={handleChange}
+                required
+                placeholder="secret_xxx"
+              />
+
+              <label className="form-label" style={{ marginTop: 10 }}>{t('config.databaseId')}</label>
+              <input
+                name="databaseId"
+                type="text"
+                className="form-input"
+                value={form.databaseId}
+                onChange={handleChange}
+                required
+              />
+
+              <label className="form-label" style={{ marginTop: 10 }}>{t('config.label')}</label>
+              <input
+                name="label"
+                type="text"
+                className="form-input"
+                value={form.label}
+                onChange={handleChange}
+                placeholder={t('config.labelPlaceholder')}
+              />
+
+              <div style={{ display: 'flex', gap: 10, marginTop: 16, justifyContent: 'flex-end' }}>
+                <button type="button" className="btn btn-tertiary" onClick={closeModal} disabled={saving}>
+                  {t('common.cancel')}
+                </button>
+                <button type="submit" className="btn btn-primary" disabled={saving}>
+                  {saving ? t('common.saving') : t('common.save')}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

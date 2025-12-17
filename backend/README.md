@@ -61,6 +61,14 @@ Health check endpoint to verify the server is running.
 
 ### Configuration
 
+#### Multi-configuration (Nouveau)
+- `GET /api/configs` : liste des configurations (active mise en avant)
+- `POST /api/configs` : crée et active une configuration (`apiKey`, `databaseId`, `label` optionnel)
+- `PUT /api/configs/<id>` : met à jour une configuration (re-valide les propriétés)
+- `PATCH /api/configs/<id>/select` : définit la configuration active
+- `DELETE /api/configs/<id>` : supprime une configuration
+- Les endpoints historiques `/api/config*` acceptent `configId` (query ou body) pour cibler une configuration précise, sinon utilisent la configuration active.
+
 #### `POST /api/config`
 Save Notion API configuration.
 

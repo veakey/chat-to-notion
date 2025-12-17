@@ -13,7 +13,7 @@ import DynamicFieldsSection from './Chat/DynamicFieldsSection';
 import PropertyFieldsSection from './Chat/PropertyFieldsSection';
 import LoadingSpinner from './LoadingSpinner';
 
-function ChatPage({ isConfigured }) {
+function ChatPage({ isConfigured, activeConfig, configs = [], onSelectConfig }) {
   const { t } = useTranslation();
   const { success, error } = useToast();
   
@@ -31,7 +31,7 @@ function ChatPage({ isConfigured }) {
     handleRemoveProperty,
     refreshProperties,
     resetForm
-  } = useChatForm(isConfigured);
+  } = useChatForm(isConfigured, activeConfig?.id);
 
   const {
     dynamicFields,
@@ -41,7 +41,7 @@ function ChatPage({ isConfigured }) {
     removeDynamicField,
     updateDynamicField,
     resetDynamicFieldsValues
-  } = useDynamicFields(isConfigured);
+  } = useDynamicFields(isConfigured, activeConfig?.id);
 
   const {
     loading,
@@ -64,7 +64,14 @@ function ChatPage({ isConfigured }) {
       return;
     }
 
-    const result = await submitChat(content, date, propertyValues, dynamicFields, availableProperties);
+    const result = await submitChat(
+      content,
+      date,
+      propertyValues,
+      dynamicFields,
+      availableProperties,
+      activeConfig?.id || null
+    );
 
     if (result.success) {
       success(result.message);
@@ -95,6 +102,29 @@ function ChatPage({ isConfigured }) {
       <h2 style={{ color: '#ffffff', marginBottom: '20px' }}>
         {t('chat.title')}
       </h2>
+
+      {configs.length > 0 && (
+        <div className="form-group" style={{ marginBottom: 12 }}>
+          <label className="form-label">{t('chat.selectConfig')}</label>
+          <select
+            className="form-input"
+            value={activeConfig?.id || ''}
+            onChange={(e) => onSelectConfig && onSelectConfig(Number(e.target.value))}
+            disabled={loading}
+          >
+            {configs.map((cfg) => (
+              <option key={cfg.id} value={cfg.id}>
+                {cfg.label || cfg.databaseTitle || cfg.databaseId}
+              </option>
+            ))}
+          </select>
+          {activeConfig && (
+            <small style={{ color: 'rgba(255,255,255,0.8)' }}>
+              {t('chat.activeConfig')}: {activeConfig.databaseTitle || activeConfig.databaseId}
+            </small>
+          )}
+        </div>
+      )}
 
       {!isConfigured && (
         <div className="message message-info">

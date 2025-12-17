@@ -18,13 +18,19 @@ chat_bp = Blueprint('chat', __name__)
 def process_chat():
     """Process and send chat data to Notion"""
     try:
-        config = get_config()
+        data = request.json
+        config_id_raw = data.get('configId')
+        try:
+            config_id = int(config_id_raw) if config_id_raw is not None else None
+        except (TypeError, ValueError):
+            return jsonify({"error": "configId invalide"}), 400
+
+        config = get_config(config_id)
         if not config:
             return jsonify({
                 "error": "Notion n'est pas configuré. Veuillez configurer les identifiants d'abord."
             }), 400
-        
-        data = request.json
+
         chat_content = data.get('content')
         chat_date = data.get('date')
         additional_property_values = data.get('additionalProperties', {})
@@ -58,7 +64,11 @@ def process_chat():
                         title_property,
                         date_property,
                         config.get('additional_properties'),
-                        config.get('dynamic_fields')
+                        config.get('dynamic_fields'),
+                        label=config.get('label'),
+                        database_title=config.get('database_title'),
+                        config_id=config.get('id'),
+                        set_active=config.get('is_active', False)
                     )
                 else:
                     return jsonify({

@@ -6,19 +6,21 @@ import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-export function useDynamicFields(isConfigured) {
+export function useDynamicFields(isConfigured, activeConfigId) {
   const [dynamicFields, setDynamicFields] = useState([]);
   const [missingProperties, setMissingProperties] = useState([]);
 
   useEffect(() => {
-    if (isConfigured) {
-      loadDynamicFields();
+    if (isConfigured && activeConfigId) {
+      loadDynamicFields(activeConfigId);
     }
-  }, [isConfigured]);
+  }, [isConfigured, activeConfigId]);
 
-  const loadDynamicFields = async () => {
+  const loadDynamicFields = async (configId) => {
     try {
-      const configResponse = await axios.get(`${API_BASE_URL}/api/config`);
+      const configResponse = await axios.get(`${API_BASE_URL}/api/config`, {
+        params: { configId },
+      });
       const savedDynamicFields = configResponse.data.dynamicFields || [];
       
       if (savedDynamicFields.length > 0) {
@@ -44,7 +46,8 @@ export function useDynamicFields(isConfigured) {
     }));
     try {
       await axios.post(`${API_BASE_URL}/api/config/dynamic-fields`, {
-        dynamicFields: fieldsToSaveStructure
+        dynamicFields: fieldsToSaveStructure,
+        configId: activeConfigId,
       });
     } catch (err) {
       console.error('Erreur lors de la sauvegarde des champs dynamiques:', err);
@@ -52,6 +55,7 @@ export function useDynamicFields(isConfigured) {
   };
 
   const addDynamicField = () => {
+    if (!activeConfigId) return false;
     if (dynamicFields.length >= 10) {
       return false;
     }
@@ -63,6 +67,7 @@ export function useDynamicFields(isConfigured) {
   };
 
   const removeDynamicField = (id) => {
+    if (!activeConfigId) return;
     const field = dynamicFields.find(f => f.id === id);
     const updatedFields = dynamicFields.filter(f => f.id !== id);
     setDynamicFields(updatedFields);
@@ -75,6 +80,7 @@ export function useDynamicFields(isConfigured) {
   };
 
   const updateDynamicField = (id, field, value) => {
+    if (!activeConfigId) return;
     const updatedFields = dynamicFields.map(f => 
       f.id === id ? { ...f, [field]: value } : f
     );

@@ -8,7 +8,7 @@ import { translateBackendError } from '../utils/errorTranslator';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-export function useConfig(isConfigured) {
+export function useConfig(isConfigured, activeConfigId) {
   const [apiKey, setApiKey] = useState('');
   const [databaseId, setDatabaseId] = useState('');
   const [loading, setLoading] = useState(false);
@@ -18,29 +18,31 @@ export function useConfig(isConfigured) {
   const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
-    if (isConfigured) {
-      loadInitialData();
+    if (isConfigured && activeConfigId) {
+      loadInitialData(activeConfigId);
     } else {
       setInitialLoading(false);
     }
-  }, [isConfigured]);
+  }, [isConfigured, activeConfigId]);
 
-  const loadInitialData = async () => {
+  const loadInitialData = async (configId) => {
     setInitialLoading(true);
     try {
       await Promise.all([
-        loadProperties(),
-        loadSelectedProperties()
+        loadProperties(configId),
+        loadSelectedProperties(configId)
       ]);
     } finally {
       setInitialLoading(false);
     }
   };
 
-  const loadProperties = async () => {
+  const loadProperties = async (configId) => {
     setLoadingProperties(true);
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/config/properties`);
+      const response = await axios.get(`${API_BASE_URL}/api/config/properties`, {
+        params: { configId },
+      });
       setAvailableProperties(response.data.properties || []);
     } catch (err) {
       console.error('Erreur lors du chargement des propriétés:', err);
@@ -49,9 +51,11 @@ export function useConfig(isConfigured) {
     }
   };
 
-  const loadSelectedProperties = async () => {
+  const loadSelectedProperties = async (configId) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/config`);
+      const response = await axios.get(`${API_BASE_URL}/api/config`, {
+        params: { configId },
+      });
       setSelectedProperties(response.data.additionalProperties || {});
     } catch (err) {
       console.error('Erreur lors du chargement de la configuration:', err);
@@ -68,7 +72,8 @@ export function useConfig(isConfigured) {
   const handleSaveProperties = async () => {
     try {
       await axios.post(`${API_BASE_URL}/api/config/properties`, {
-        additionalProperties: selectedProperties
+        additionalProperties: selectedProperties,
+        configId: activeConfigId,
       });
       return { success: true, message: i18n.t('success.propertiesSaved') };
     } catch (err) {

@@ -13,7 +13,7 @@ export function useChatSubmission() {
   const [progress, setProgress] = useState(0);
   const [missingProperties, setMissingProperties] = useState([]);
 
-  const validateDynamicFields = async (dynamicFields) => {
+  const validateDynamicFields = async (dynamicFields, configId) => {
     if (dynamicFields.length === 0) return { valid: true, missing: [] };
 
     const fieldsToValidate = dynamicFields
@@ -25,7 +25,8 @@ export function useChatSubmission() {
     try {
       setProgress(30);
       const response = await axios.post(`${API_BASE_URL}/api/config/validate-properties`, {
-        properties: fieldsToValidate
+        properties: fieldsToValidate,
+        configId,
       });
 
       const validation = response.data.validation;
@@ -45,13 +46,13 @@ export function useChatSubmission() {
     }
   };
 
-  const submitChat = async (content, date, propertyValues, dynamicFields, availableProperties = []) => {
+  const submitChat = async (content, date, propertyValues, dynamicFields, availableProperties = [], configId = null) => {
     setLoading(true);
     setProgress(10);
 
     try {
       // Valider les champs dynamiques
-      const validation = await validateDynamicFields(dynamicFields);
+      const validation = await validateDynamicFields(dynamicFields, configId);
       if (!validation.valid && validation.missing.length > 0) {
         setProgress(0);
         setLoading(false);
@@ -67,7 +68,8 @@ export function useChatSubmission() {
       if (Object.keys(propertyValues).length > 0) {
         try {
           const validationResponse = await axios.post(`${API_BASE_URL}/api/config/validate-property-values`, {
-            propertyValues: propertyValues
+            propertyValues: propertyValues,
+            configId,
           });
           
           const validationErrors = [];
@@ -132,6 +134,7 @@ export function useChatSubmission() {
         content,
         date,
         additionalProperties: filledProperties,
+        configId,
       });
 
       setProgress(90);

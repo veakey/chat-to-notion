@@ -10,6 +10,17 @@
   },
   "config": {
     "title": "Configurazione Notion",
+    "add": "Aggiungi configurazione",
+    "list": "Configurazioni",
+    "noConfig": "Nessuna configurazione al momento.",
+    "select": "Attiva",
+    "active": "Attiva",
+    "addConfig": "Aggiungi configurazione",
+    "editConfig": "Modifica configurazione",
+    "apiKey": "Chiave API",
+    "databaseId": "ID database",
+    "label": "Nome descrittivo",
+    "labelPlaceholder": "Nome descrittivo (es. Progetto Alpha)",
     "status": {
       "configured": "Configurato",
       "notConfigured": "Non configurato"
@@ -46,6 +57,8 @@
   },
   "chat": {
     "title": "Invia un chat a Notion",
+    "selectConfig": "Seleziona una configurazione",
+    "activeConfig": "Database attivo",
     "notConfigured": "Configura prima le tue credenziali Notion nella scheda Configurazione",
     "missingProperties": "Le seguenti proprietà non esistono nel tuo database Notion:",
     "missingPropertiesNote": "Crea queste proprietà in Notion o rimuovi questi campi prima di inviare.",
@@ -81,6 +94,8 @@
     }
   },
   "errors": {
+    "requiredFields": "I campi obbligatori devono essere compilati",
+    "generic": "Si è verificato un errore",
     "notConfigured": "Configura prima le credenziali Notion nella scheda Configurazione",
     "contentRequired": "Il contenuto del chat è richiesto",
     "apiKeyRequired": "Il codice segreto e l'ID del database sono richiesti",
@@ -92,6 +107,8 @@
   },
   "success": {
     "configSaved": "Configurazione salvata con successo",
+    "configUpdated": "Configurazione aggiornata con successo",
+    "configDeleted": "Configurazione eliminata con successo",
     "propertiesSaved": "Proprietà aggiuntive salvate con successo",
     "dynamicFieldsSaved": "Campi dinamici salvati con successo",
     "propertiesRefreshed": "Proprietà aggiornate da Notion",
@@ -119,8 +136,16 @@
       "checkbox": "Casella di controllo",
       "url": "URL",
       "email": "Email",
-      "phone_number": "Telefono"
+      "phone_number": "Telefono",
+      "relation": "Relazione"
     }
+  },
+  "common": {
+    "edit": "Modifica",
+    "delete": "Elimina",
+    "cancel": "Annulla",
+    "save": "Salva",
+    "saving": "Salvataggio..."
   }
 }
 

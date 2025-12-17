@@ -8,35 +8,32 @@ import ToastContainer from './components/ToastContainer';
 import LanguageSelector from './components/LanguageSelector';
 import LoadingSpinner from './components/LoadingSpinner';
 import { ToastProvider } from './contexts/ToastContext';
-import axios from 'axios';
-
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+import { useConfigs } from './hooks/useConfigs';
 
 function App() {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('chat');
-  const [isConfigured, setIsConfigured] = useState(false);
-  const [loading, setLoading] = useState(true);
+
+  const {
+    configs,
+    activeConfigId,
+    activeConfig,
+    loading,
+    initialLoading,
+    fetchConfigs,
+    addConfig,
+    updateConfig,
+    deleteConfig,
+    selectConfig,
+  } = useConfigs();
+
+  const isConfigured = Boolean(activeConfig);
 
   useEffect(() => {
-    checkConfiguration();
-  }, []);
-
-  const checkConfiguration = async () => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/api/config`);
-      setIsConfigured(response.data.configured);
-    } catch (error) {
-      console.error('Error checking configuration:', error);
-    } finally {
-      setLoading(false);
+    if (!isConfigured) {
+      setActiveTab('config');
     }
-  };
-
-  const handleConfigSaved = () => {
-    setIsConfigured(true);
-    setActiveTab('chat');
-  };
+  }, [isConfigured]);
 
   return (
     <ToastProvider>
@@ -71,7 +68,7 @@ function App() {
             )}
           </div>
 
-          {loading ? (
+          {initialLoading ? (
             <div className="glass-card">
               <LoadingSpinner message={t('app.loading')} />
             </div>
@@ -79,11 +76,23 @@ function App() {
             <>
               {activeTab === 'config' ? (
                 <ConfigPage
-                  isConfigured={isConfigured}
-                  onConfigSaved={handleConfigSaved}
+                  configs={configs}
+                  activeConfigId={activeConfigId}
+                  onSelectConfig={selectConfig}
+                  onRefreshConfigs={fetchConfigs}
+                  onAddConfig={addConfig}
+                  onUpdateConfig={updateConfig}
+                  onDeleteConfig={deleteConfig}
+                  loadingConfigs={loading}
+                  initialLoading={initialLoading}
                 />
               ) : (
-                <ChatPage isConfigured={isConfigured} />
+                <ChatPage
+                  isConfigured={isConfigured}
+                  activeConfig={activeConfig}
+                  configs={configs}
+                  onSelectConfig={selectConfig}
+                />
               )}
             </>
           )}

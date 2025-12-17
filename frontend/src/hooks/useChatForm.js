@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-export function useChatForm(isConfigured) {
+export function useChatForm(isConfigured, activeConfigId) {
   const [content, setContent] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [loading, setLoading] = useState(false);
@@ -17,19 +17,23 @@ export function useChatForm(isConfigured) {
   const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
-    if (isConfigured) {
-      loadProperties();
+    if (isConfigured && activeConfigId) {
+      loadProperties(activeConfigId);
     } else {
       setInitialLoading(false);
     }
-  }, [isConfigured]);
+  }, [isConfigured, activeConfigId]);
 
-  const loadProperties = async () => {
+  const loadProperties = async (configId) => {
     setInitialLoading(true);
     try {
       const [propertiesResponse, configResponse] = await Promise.all([
-        axios.get(`${API_BASE_URL}/api/config/properties`),
-        axios.get(`${API_BASE_URL}/api/config`)
+        axios.get(`${API_BASE_URL}/api/config/properties`, {
+          params: { configId },
+        }),
+        axios.get(`${API_BASE_URL}/api/config`, {
+          params: { configId },
+        })
       ]);
       
       const allProperties = propertiesResponse.data.properties || [];
@@ -68,7 +72,8 @@ export function useChatForm(isConfigured) {
     // Sauvegarder la configuration
     try {
       await axios.post(`${API_BASE_URL}/api/config/properties`, {
-        additionalProperties: updated
+        additionalProperties: updated,
+        configId: activeConfigId,
       });
     } catch (err) {
       console.error('Erreur lors de la sauvegarde:', err);
@@ -90,7 +95,8 @@ export function useChatForm(isConfigured) {
     // Sauvegarder la configuration
     try {
       await axios.post(`${API_BASE_URL}/api/config/properties`, {
-        additionalProperties: updated
+        additionalProperties: updated,
+        configId: activeConfigId,
       });
     } catch (err) {
       console.error('Erreur lors de la sauvegarde:', err);
@@ -101,7 +107,9 @@ export function useChatForm(isConfigured) {
   };
 
   const refreshProperties = async () => {
-    await loadProperties();
+    if (activeConfigId) {
+      await loadProperties(activeConfigId);
+    }
   };
 
   const resetForm = () => {
